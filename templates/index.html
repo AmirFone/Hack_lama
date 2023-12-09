@@ -1,112 +1,36 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-<style>
-body {
-  font-family: 'Arial', sans-serif;
-  background-color: #e6e7ee; /* Adjusted to a light grey background */
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-.button {
-  background-color: #5b64e4;
-	color: white;
-	padding: 10px 20px;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-	margin-top: 20px;
-	font-size: 16px; /* Larger font size for better visibility */
-	display: block; /* Makes the button a block element */
-	width: 100%; /* Full width */
-	box-sizing: border-box; /* Ensures padding does not add to the width */
-}
-
-.button:hover {
-	background-color: #4a56d3;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-      }
-
-
-.signup-container {
-  background-color: #ffffff;
-  width: 400px;
-  padding: 40px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for depth */
-  margin: auto;
-}
-
-h2 {
-  color: #333; /* Dark grey color for the text */
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-input[type=text], input[type=password] {
-  width: calc(100% - 20px);
-  padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc; /* Lighter border color */
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-input[type=submit] {
-  width: 100%;
-  background-color: #5b64e4; /* Adjusted to a blue color */
-  color: white;
-  padding: 15px 20px;
-  margin-top: 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-input[type=submit]:hover {
-  background-color: #4a56d3; /* Darker blue on hover */
-}
-
-.already-account {
-  display: block;
-  text-align: center;
-  margin-top: 20px;
-  color: #333; /* Dark grey color for text */
-}
-
-a {
-  color: #5b64e4; /* Same blue color as the submit button for consistency */
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-/* Responsive design */
-@media (max-width: 480px) {
-  .signup-container {
-    width: 95%;
-    padding: 20px;
-  }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Submission and Video Recording</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
+
 <body>
-  <div class="signup-container">
-    <h2>Sign Up</h2>
-    <form action="/login" method="post">
-      <input type="text" id="username" name="username" placeholder="Username">
-      <input type="password" id="password" name="password" placeholder="Password">
-      <input type="submit" value="Login" class="button">
-    </form>
-    <span class="already-account">Already have an account? <a href="/login">Log in</a></span>
-  </div>
+
+    <div class="container">
+        <h2>Document Submission and Video Recording</h2>
+        <div class="input-group">
+            <div class="upload-box">
+                <div class="drag-drop-text">Drag & Drop Your Document Here or Paste Text Below</div>
+                <button class="browse-btn">Browse File</button>
+                <input type="file" id="fileInput" class="browse-btn" style="display: none;" onchange="handleFileUpload(this.files)">                
+            </div>
+            <textarea class="text-area" placeholder="Paste your text here" oninput="handleTextInput()"></textarea>
+        </div>
+        <div class="webcam-container">
+            <video id="webcam" autoplay></video>
+            <button class="record-btn" onclick="startRecording()">Start Recording</button>
+            <button class="stop-btn" onclick="stopRecording()">Stop Recording</button>
+            <div class="record-progress" id="recordProgress"></div>
+            <div class="timer" id="timer">00:00</div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
 </body>
 
 </html>

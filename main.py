@@ -1,3 +1,4 @@
+from input_processing import extract_and_save_frames
 from script_correctness import analyze_correctness
 from speech_to_text import (
     chain_words_with_pauses,
@@ -8,11 +9,16 @@ from speech_to_text import (
 
 
 if __name__ == "__main__":
-    transcribed_data = transcribe_audio("sample_script.mp3")
+    transcribed_data = transcribe_audio("demo_video.mp3")
 
     transcribed_word_timings = extract_word_timings(transcribed_data)
     transcribed_word_clarity = extract_word_probabilities(
         transcribed_data, probabilities_only=True
+    )
+    print(transcribed_word_clarity)
+
+    extract_and_save_frames(
+        video_path="demo_video.mp4", word_timings=transcribed_word_timings
     )
 
     transcribed_text_with_pauses = chain_words_with_pauses(
