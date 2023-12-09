@@ -1,3 +1,4 @@
+from get_statistics import get_statistics
 from input_processing import extract_and_save_frames
 from script_correctness import analyze_correctness
 from speech_to_text import (
@@ -9,25 +10,27 @@ from speech_to_text import (
 
 
 if __name__ == "__main__":
-    transcribed_data = transcribe_audio("demo_video.mp3")
+    # transcribed_data = transcribe_audio("demo_video.mp3")
 
-    transcribed_word_timings = extract_word_timings(transcribed_data)
-    transcribed_word_clarity = extract_word_probabilities(
-        transcribed_data, probabilities_only=True
-    )
-    print(transcribed_word_clarity)
+    # transcribed_word_timings = extract_word_timings(transcribed_data)
+    # transcribed_word_clarity = extract_word_probabilities(
+    #     transcribed_data, probabilities_only=True
+    # )
+    # print(transcribed_word_clarity)
 
-    extract_and_save_frames(
-        video_path="demo_video.mp4", word_timings=transcribed_word_timings
-    )
+    # extract_and_save_frames(
+    #     video_path="demo_video.mp4", word_timings=transcribed_word_timings
+    # )
 
-    transcribed_text_with_pauses = chain_words_with_pauses(
-        word_data=transcribed_word_timings, pause_length_seconds=0.8
-    )
+    # transcribed_text_with_pauses = chain_words_with_pauses(
+    #     word_data=transcribed_word_timings, pause_length_seconds=0.8
+    # )
 
-    transcribed_text = transcribed_data["text"]
+    # transcribed_text = transcribed_data["text"]
 
-    script_correctness = analyze_correctness(
-        spoken_text=transcribed_text,
-        script_input="It's come down to this, hasn't it? [pause] All the roads I've taken, all the choices I've made. [pause] And yet, here I stand, at the crossroads of my destiny.",
-    )
+    # script_correctness = analyze_correctness(
+    #     spoken_text=transcribed_text,
+    #     script_input="It's come down to this, hasn't it? [pause] All the roads I've taken, all the choices I've made. [pause] And yet, here I stand, at the crossroads of my destiny.",
+    # )
+
+    print(get_statistics("hey"))
