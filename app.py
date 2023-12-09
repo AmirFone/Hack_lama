@@ -1,12 +1,15 @@
 from flask import Flask, request, redirect, url_for, render_template, jsonify
 import os
+from moviepy.editor import VideoFileClip
 
 app = Flask(__name__)
-# users = {"user": "password", "username": "password"}
+users = {"user": "password", "username": "password"}
 
-@app.route('/')
+
+@app.route("/")
 def home():
-    return render_template('index.html')  # Render the sign-in page
+    return render_template("index.html")  # Render the sign-in page
+
 
 # @app.route('/login', methods=['POST'])
 # def login():
@@ -33,35 +36,34 @@ def home():
 #     if video:  # If a video is actually present
 #         video_path = os.path.join('.video', f'script_video.mp4')
 #         video.save(video_path)
-        
+
 #         # we return our info
 #         return jsonify({"message": "Video uploaded successfully"}), 200
 
 #     return jsonify({"error": "Invalid request"}), 400
 
-@app.route('/video', methods=['POST'])
+
+@app.route("/video", methods=["POST"])
 def upload_video():
     global clip_counter
-    if 'video' not in request.files:
+    if "video" not in request.files:
         return jsonify({"error": "No video part"}), 400
 
-    video = request.files['video']
+    video = request.files["video"]
 
-    if video.filename == '':
+    if video.filename == "":
         return jsonify({"error": "No selected video"}), 400
 
     if video:  # If a video is actually present
-        clip_counter += 1
-
         # Save the original video
-        video_path = os.path.join('.video', f'script_video.mp4')
+        video_path = os.path.join(".video", f"script_video.mp4")
         video.save(video_path)
 
         # Load the video file
         clip = VideoFileClip(video_path)
 
         # Extract audio from the video
-        audio_path = os.path.join('.audio', f'script_audio.mp3')
+        audio_path = os.path.join(".audio", f"script_audio.mp3")
         clip.audio.write_audiofile(audio_path)
 
         # Return success message
@@ -70,6 +72,5 @@ def upload_video():
     return jsonify({"error": "Invalid request"}), 400
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
