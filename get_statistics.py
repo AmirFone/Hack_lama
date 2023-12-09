@@ -1,5 +1,6 @@
 import os
 import subprocess
+import facial_expressions
 from input_processing import extract_and_save_frames
 from script_correctness import analyze_correctness
 from speech_to_text import (
@@ -42,6 +43,17 @@ def get_statistics(script):
     #     )
     # )
 
+    file_paths = extract_and_save_frames(
+        video_path=mp4_path, word_timings=transcribed_word_timings
+    )
+    video_analysis = facial_expressions.process_images(file_paths)
+    (
+        direction_percentages,
+        emotion_percentages,
+        average_direction,
+        average_emotion,
+    ) = facial_expressions.get_image_statistics(data=video_analysis)
+
     statistics = {
         "transcribed_text": transcribed_text,
         "words_and_clarity_scores": transcribed_word_clarity,
@@ -49,7 +61,12 @@ def get_statistics(script):
         "transcribed_word_timings": transcribed_word_timings,
         "transcribed_text_with_pauses": transcribed_text_with_pauses,
         "script_correctness_score": script_correctness,
-        # "speaker_sentiments": sentiments,
+        "direction_percentages": direction_percentages,
+        "emotion_percentages": emotion_percentages,
+        "average_direction": average_direction,
+        "average_emotion": average_emotion,
     }
+
+    print(video_analysis)
 
     return statistics
