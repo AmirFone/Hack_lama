@@ -1,4 +1,8 @@
 let progressInterval, recordingTime, maxRecordingTime = 15000;
+document.querySelector('.browse-btn').addEventListener('click', function() {
+    document.querySelector('#fileInput').click();
+});
+
 
 function handleFileUpload(files) {
     // File upload code...
