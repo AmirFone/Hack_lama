@@ -1,9 +1,7 @@
-from flask import Flask, request, redirect, url_for,render_template, jsonify
+from flask import Flask, request, redirect, url_for, render_template, jsonify
 import os
 
 app = Flask(__name__)
-curr_video_path=""
-clip_counter=0
 # users = {"user": "password", "username": "password"}
 
 @app.route('/')
