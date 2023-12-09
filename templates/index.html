@@ -1,112 +1,230 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<style>
-body {
-  font-family: 'Arial', sans-serif;
-  background-color: #e6e7ee; /* Adjusted to a light grey background */
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-.button {
-  background-color: #5b64e4;
-	color: white;
-	padding: 10px 20px;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-	margin-top: 20px;
-	font-size: 16px; /* Larger font size for better visibility */
-	display: block; /* Makes the button a block element */
-	width: 100%; /* Full width */
-	box-sizing: border-box; /* Ensures padding does not add to the width */
-}
-
-.button:hover {
-	background-color: #4a56d3;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-      }
-
-
-.signup-container {
-  background-color: #ffffff;
-  width: 400px;
-  padding: 40px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for depth */
-  margin: auto;
-}
-
-h2 {
-  color: #333; /* Dark grey color for the text */
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-input[type=text], input[type=password] {
-  width: calc(100% - 20px);
-  padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc; /* Lighter border color */
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-input[type=submit] {
-  width: 100%;
-  background-color: #5b64e4; /* Adjusted to a blue color */
-  color: white;
-  padding: 15px 20px;
-  margin-top: 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-input[type=submit]:hover {
-  background-color: #4a56d3; /* Darker blue on hover */
-}
-
-.already-account {
-  display: block;
-  text-align: center;
-  margin-top: 20px;
-  color: #333; /* Dark grey color for text */
-}
-
-a {
-  color: #5b64e4; /* Same blue color as the submit button for consistency */
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-/* Responsive design */
-@media (max-width: 480px) {
-  .signup-container {
-    width: 95%;
-    padding: 20px;
-  }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Submission and Video Recording</title>
+    <style>
+        /* Styles adjusted for a modern and depth effect */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            width: 768px;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            position: relative; /* For stacking the progress bar */
+        }
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #5b64e4, #4a56d3);
+            border-radius: 5px;
+        }
+        .container h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        .upload-box {
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        .drag-drop-text {
+            color: #7a7f9a;
+            margin-bottom: 10px;
+        }
+        .file-input, .text-area {
+            width: 100%;
+            border: none;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .text-area {
+            border: 1px solid #ccc;
+            height: 150px;
+            resize: vertical;
+        }
+        .browse-btn {
+            background-color: #5b64e4;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .browse-btn:hover {
+            background-color: #4a56d3;
+        }
+        .webcam-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        #webcam {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        .record-btn, .stop-btn {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .record-btn:hover, .stop-btn:hover {
+            background-color: #c0392b;
+        }
+        .record-progress {
+            width: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #5b64e4, #4a56d3);
+            margin-top: 5px;
+            border-radius: 5px;
+            transition: width 1s ease;
+        }
+        .timer {
+            color: #999;
+            font-size: 0.9em;
+        }
+        @media (max-width: 800px) {
+            .container {
+                width: 90%;
+                padding: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="signup-container">
-    <h2>Sign Up</h2>
-    <form action="/login" method="post">
-      <input type="text" id="username" name="username" placeholder="Username">
-      <input type="password" id="password" name="password" placeholder="Password">
-      <input type="submit" value="Login" class="button">
-    </form>
-    <span class="already-account">Already have an account? <a href="/login">Log in</a></span>
-  </div>
-</body>
 
+<div class="container">
+    <h2>Document Submission and Video Recording</h2>
+    <div class="input-group">
+        <div class="upload-box">
+            <div class="drag-drop-text">Drag & Drop Your Document Here or Paste Text Below</div>
+            <button class="browse-btn">Browse File</button>
+            <input type="file" class="file-input" onchange="handleFileUpload(this.files)">
+        </div>
+        <textarea class="text-area" placeholder="Paste your text here" oninput="handleTextInput()"></textarea>
+    </div>
+    <div class="webcam-container">
+        <video id="webcam" autoplay></video>
+        <button class="record-btn" onclick="startRecording()">Start Recording</button>
+        <button class="stop-btn" onclick="stopRecording()">Stop Recording</button>
+        <div class="record-progress" id="recordProgress"></div>
+        <div class="timer" id="timer">00:00</div>
+    </div>
+</div>
+
+<script>
+    let progressInterval, recordingTime, maxRecordingTime = 15000;
+    
+    function handleFileUpload(files) {
+        // File upload code...
+        showWebcam();
+    }
+
+    function handleTextInput() {
+        // Text input code...
+        showWebcam();
+    }
+
+    function showWebcam() {
+        document.getElementById('webcam').style.display = 'block';
+        document.querySelector('.record-btn').style.display = 'inline-block';
+        document.querySelector('.stop-btn').style.display = 'inline-block';
+        startWebcam();
+    }
+
+    function startWebcam() {
+        navigator.mediaDevices.getUserMedia({video: true, audio: false})
+            .then(stream => {
+                const video = document.getElementById('webcam');
+                video.srcObject = stream;
+                video.play();
+            })
+            .catch(err => {
+                console.error('Error accessing the webcam', err);
+            });
+    }
+
+    let mediaRecorder;
+    let recordedBlobs;
+
+    function handleDataAvailable(event) {
+        if (event.data && event.data.size > 0) {
+            recordedBlobs.push(event.data);
+        }
+    }
+
+    function startRecording() {
+        document.querySelector('.record-btn').disabled = true;
+        recordedBlobs = [];
+        const video = document.getElementById('webcam');
+        let stream = video.srcObject;
+        mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+        mediaRecorder.ondataavailable = handleDataAvailable;
+        mediaRecorder.start();
+
+        // Start the progress indicator
+        const recordProgress = document.getElementById('recordProgress');
+        const timer = document.getElementById('timer');
+        recordProgress.style.width = '0%';
+        recordingTime = 0;
+        timer.textContent = '00:00';
+        progressInterval = setInterval(() => {
+            recordingTime += 1000;
+            const progress = (recordingTime / maxRecordingTime) * 100;
+            recordProgress.style.width = progress + '%';
+            let seconds = Math.floor((recordingTime / 1000) % 60);
+            let minutes = Math.floor((recordingTime / (1000 * 60)) % 60);
+            timer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            if (recordingTime >= maxRecordingTime) {
+                clearInterval(progressInterval);
+                stopRecording();
+            }
+        }, 1000);
+    }
+
+    function stopRecording() {
+        document.querySelector('.record-btn').disabled = false;
+        mediaRecorder.stop();
+        clearInterval(progressInterval); // Stop the progress indicator
+        const blob = new Blob(recordedBlobs, { type: 'video/webm' });
+        // Handle the recorded blob as needed...
+        // Example: Download the video file
+        // ...
+        // Stop all video streams
+        const video = document.getElementById('webcam');
+        video.srcObject.getTracks().forEach(track => track.stop());
+    }
+
+    // Drag and drop functionality...
+    // ...
+</script>
+
+</body>
 </html>

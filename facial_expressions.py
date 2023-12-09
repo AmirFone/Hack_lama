@@ -1,14 +1,17 @@
 import base64
 import requests
+from dotenv import load_dotenv
 
 # OpenAI API Key
-api_key = "YOUR_OPENAI_API_KEY"
+load_dotenv()
+api_key = os.getenv("api_key_open_ai")
+
+current_sentence= "not_sure_yet"
 
 # Function to encode the image
 def encode_image(image_path):
   with open(image_path, "rb") as image_file:
     return base64.b64encode(image_file.read()).decode('utf-8')
-
 # Path to your image
 image_path = "path_to_your_image.jpg"
 
@@ -28,7 +31,7 @@ payload = {
       "content": [
         {
           "type": "text",
-          "text": "What’s in this image?"
+          "text": "Please analyze the sentiment expressed in the following Identify and describe if emotions or sentiments conveyed by the person alines with this sentence from a script{current_sentence}"
         },
         {
           "type": "image_url",
@@ -43,5 +46,3 @@ payload = {
 }
 
 response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
-
-print(response.json())
