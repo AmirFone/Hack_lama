@@ -7,7 +7,7 @@ from speech_to_text import (
     extract_word_timings,
     transcribe_audio,
 )
-
+import facial_expressions
 
 if __name__ == "__main__":
     # transcribed_data = transcribe_audio("demo_video.mp3")

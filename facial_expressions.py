@@ -1,6 +1,5 @@
 import base64
 import requests
-import pdb
 
 api_key = "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"
 
@@ -20,7 +19,7 @@ def annotate_image(image_path):
                       The gaze direction should be in the form: center, left, right, up, or down. 
                       Select only ONE single most probable emotion and gaze direction.
                       DO NOT OUTPUT ANYTHING OTHER THAN A STRING IN THE FORM:
-                      '(emotion, gaze_direction)' """
+                      (emotion, gaze_direction) """
     payload = {
       "model": "gpt-4-vision-preview",
       "messages": [
@@ -62,12 +61,4 @@ def process_images(images):
         video_analysis.append((image, sentiment, direction))
     return video_analysis, eye_engagement/len(images)
 
-def main():
-    video_analysis, engagement = process_images(['test1.jpg', 'test2.jpg', 'test3.jpg']) 
-    print(video_analysis)
-    print(engagement)
-    return
 
-if __name__ == "__main__":
-    main()
-  

@@ -18,7 +18,7 @@ def extract_and_save_frames(video_path, word_timings, output_folder=".still_fram
     # Open the video file
     cap = cv2.VideoCapture(video_path)
     fps = cap.get(cv2.CAP_PROP_FPS)  # Get frames per second of the video
-
+    frame_paths = []
     for i, timestamp in enumerate(timestamps):
         frame_number = math.floor(timestamp * fps)
         cap.set(cv2.CAP_PROP_POS_FRAMES, frame_number)
@@ -26,6 +26,9 @@ def extract_and_save_frames(video_path, word_timings, output_folder=".still_fram
         if ret:
             # Save the frame as a JPG file
             frame_path = os.path.join(output_folder, f"frame_{i}.jpg")
+            frame_paths.append(frame_path)
             cv2.imwrite(frame_path, frame)
 
     cap.release()
+    return frame_paths
+
