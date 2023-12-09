@@ -4,14 +4,34 @@ document.querySelector('.browse-btn').addEventListener('click', function() {
 });
 
 
-function handleFileUpload(files) {
-    // File upload code...
+function handlePDFInput(event) {
     showWebcam();
+    const file = event.target.files[0];
+    const formData = new FormData();
+    formData.append('pdf', file);
+
+    fetch('/text', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => console.log(data));
 }
 
 function handleTextInput() {
-    // Text input code...
     showWebcam();
+    const text = document.getElementById('fileInput').value;
+            fetch('/text', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'text=' + encodeURIComponent(text)
+            })
+            .then(response => response.json())
+            .then(data => console.log(data));
+
+    
 }
 
 function showWebcam() {
