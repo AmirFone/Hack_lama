@@ -71,28 +71,33 @@ function stopRecording() {
     document.querySelector('.record-btn').disabled = false;
     mediaRecorder.stop();
     clearInterval(progressInterval); // Stop the progress indicator
-    const blob = new Blob(recordedBlobs, { type: 'video/webm' });
 
-    // New code to send the recorded video to the Flask endpoint
-    const formData = new FormData();
-    formData.append('video', blob);
+    // Wait for the MediaRecorder to stop before creating the blob
+    mediaRecorder.onstop = () => {
+        const blob = new Blob(recordedBlobs, { type: 'video/webm' });
+        console.log("Blob size: " + blob.size + " bytes");
 
-    fetch('/video', {
-        method: 'POST',
-        body: formData
-    }).then(response => {
-        return response.text();
-    }).then(data => {
-        console.log(data);
-        // Handle server response here
-    }).catch(error => {
-        console.error('Error sending the video:', error);
-    });
+        // Send the recorded video to the Flask endpoint
+        const formData = new FormData();
+        formData.append('video', blob);
+        fetch('/video', {
+            method: 'POST',
+            body: formData
+        }).then(response => {
+            return response.text();
+        }).then(data => {
+            console.log(data);
+            // Handle server response here
+        }).catch(error => {
+            console.error('Error sending the video:', error);
+        });
+    };
 
     // Stop all video streams
     const video = document.getElementById('webcam');
     video.srcObject.getTracks().forEach(track => track.stop());
 }
+
 
 
 const uploadBox = document.querySelector('.upload-box');

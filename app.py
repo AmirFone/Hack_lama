@@ -51,10 +51,18 @@ def upload_video():
 
     video = request.files["video"]
 
+
+
     if video.filename == "":
         return jsonify({"error": "No selected video"}), 400
+    
 
     if video:  # If a video is actually present
+        
+        
+        video_dir = ".video"
+        if not os.path.exists(video_dir):
+            os.makedirs(video_dir)
         # Save the original video
         video_path = os.path.join(".video", f"script_video.mp4")
         video.save(video_path)
@@ -63,6 +71,10 @@ def upload_video():
         clip = VideoFileClip(video_path)
 
         # Extract audio from the video
+        
+        audio_dir = ".audio"
+        if not os.path.exists(video_dir):
+            os.makedirs(video_dir)
         audio_path = os.path.join(".audio", f"script_audio.mp3")
         clip.audio.write_audiofile(audio_path)
 
