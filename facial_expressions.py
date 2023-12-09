@@ -47,7 +47,7 @@ def annotate_image(image_path):
 def process_images(images):
     video_analysis = []
     # eye_engagement = 0
-    for image in images[:5]:
+    for image in images[:5]:  # TODO: This should be removed when we need one image analysis per word
         response = annotate_image(image)
         content = response["choices"][0]["message"]["content"]
         content = content[1:-1].split(",")
