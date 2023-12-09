@@ -214,16 +214,40 @@
         mediaRecorder.stop();
         clearInterval(progressInterval); // Stop the progress indicator
         const blob = new Blob(recordedBlobs, { type: 'video/webm' });
-        // Handle the recorded blob as needed...
-        // Example: Download the video file
-        // ...
+    
+        // New code to send the recorded video to the Flask endpoint
+        const formData = new FormData();
+        formData.append('video', blob);
+    
+        fetch('/video', {
+            method: 'POST',
+            body: formData
+        }).then(response => {
+            return response.text();
+        }).then(data => {
+            console.log(data);
+            // Handle server response here
+        }).catch(error => {
+            console.error('Error sending the video:', error);
+        });
+    
         // Stop all video streams
         const video = document.getElementById('webcam');
         video.srcObject.getTracks().forEach(track => track.stop());
     }
+    
 
-    // Drag and drop functionality...
-    // ...
+    const uploadBox = document.querySelector('.upload-box');
+    uploadBox.addEventListener('dragover', (event) => {
+    event.preventDefault();
+    // Add styling to indicate drag is over this area
+    });
+
+    uploadBox.addEventListener('drop', (event) => {
+    event.preventDefault();
+    const files = event.dataTransfer.files;
+    uploadFile(files);
+});
 </script>
 
 </body>
