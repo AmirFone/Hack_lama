@@ -46,3 +46,22 @@ def chain_words_with_pauses(word_data, pause_length_seconds):
         first_word = False  # Update the flag after the first word is processed
 
     return chained_text
+
+
+def extract_word_probabilities(input_dict, probabilities_only=False):
+    output = []
+
+    # Iterate through each segment
+    for segment in input_dict["segments"]:
+        # Iterate through each word in the segment
+        for word_info in segment["words"]:
+            word = word_info["word"]
+            probability = word_info["probability"]
+
+            # Append the tuple (word, probability) or just the probability
+            if probabilities_only:
+                output.append(probability)
+            else:
+                output.append((word, probability))
+
+    return output
