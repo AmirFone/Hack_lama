@@ -24,7 +24,6 @@ def home():
 
 @app.route('/video', methods=['POST'])
 def upload_video():
-    global clip_counter
     if 'video' not in request.files:
         return jsonify({"error": "No video part"}), 400
 
@@ -34,8 +33,7 @@ def upload_video():
         return jsonify({"error": "No selected video"}), 400
 
     if video:  # If a video is actually present
-        clip_counter+=1
-        video_path = os.path.join('video', f'uploaded_video{clip_counter}.mp4')
+        video_path = os.path.join('.video', f'script_video.mp4')
         video.save(video_path)
         
         # we return our info
