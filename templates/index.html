@@ -16,7 +16,7 @@
             <div class="upload-box">
                 <div class="drag-drop-text">Drag & Drop Your Document Here or Paste Text Below</div>
                 <button class="browse-btn">Browse File</button>
-                <input type="file" class="file-input" onchange="handleFileUpload(this.files)">
+                <input type="file" id="fileInput" class="browse-btn" style="display: none;" onchange="handleFileUpload(this.files)">                
             </div>
             <textarea class="text-area" placeholder="Paste your text here" oninput="handleTextInput()"></textarea>
         </div>

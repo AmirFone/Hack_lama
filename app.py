@@ -92,6 +92,47 @@ def upload_video():
 
     return jsonify({"error": "Invalid request"}), 400
 
+@app.route('/text', methods=['POST'])
+def process_text_or_pdf():
+    if 'text' in request.form:
+        # If 'text' is in the form data, it's text
+        text = request.form['text']
+
+        # Handle text processing logic here
+        print("Received text:", text)
+
+        # Return a success message
+        return jsonify({"message": "Text received and processed successfully"}), 200
+
+    elif 'pdf' in request.files:
+        # If 'pdf' is in the uploaded files, it's a PDF
+        pdf_file = request.files['pdf']
+
+        # Check if a PDF file is actually provided
+        if pdf_file and pdf_file.filename.endswith('.pdf'):
+            pdf_text = extract_text_from_pdf(pdf_file)
+            print("Extracted text from PDF:", pdf_text)
+
+            # Handle PDF text processing logic here
+
+            # Return a success message
+            return jsonify({"message": "PDF received and processed successfully"}), 200
+
+    return jsonify({"error": "Invalid request"}), 400
+
+def extract_text_from_pdf(pdf_file):
+    # Use PyPDF2 or any other library to extract text from the PDF
+    pdf_text = ""
+    try:
+        pdf_reader = PyPDF2.PdfFileReader(pdf_file)
+        for page_num in range(pdf_reader.numPages):
+            page = pdf_reader.getPage(page_num)
+            pdf_text += page.extractText()
+    except Exception as e:
+        print("Error extracting text from PDF:", str(e))
+    
+    return pdf_text
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5003)

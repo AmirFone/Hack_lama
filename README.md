@@ -1,2 +1,2 @@
 # Hack_llama
-script.api
+script.ai
