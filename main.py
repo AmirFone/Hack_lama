@@ -1,14 +1,27 @@
 from script_correctness import analyze_correctness
-from speech_to_text import transcribe_audio
+from speech_to_text import (
+    chain_words_with_pauses,
+    extract_word_timings,
+    transcribe_audio,
+)
 
 
 if __name__ == "__main__":
-    transcribed_text = transcribe_audio("sample_conversation.mp3")
-    print(transcribed_text)
+    transcribed_data = transcribe_audio("sample_script.mp3")
 
-    print(
-        analyze_correctness(
-            spoken_text=transcribed_text,
-            script_input="Good morning. My name is Salesperson Nehm, and I'm here to talk to you about the incredible benefits of solar roofing. Did you know that solar roofing can significantly reduce your energy bills? Good morning. Yes, I'm aware that solar roofing can reduce energy bills. That's great to hear. Solar roofing is not only a cost-effective solution, but it's also environmentally friendly. By harnessing the power of the sun, you can save money while reducing your carbon footprint. That sounds like a win-win situation. Absolutely. With solar roofing, you can make a positive impact on the environment while enjoying the financial benefits. It's a win-win indeed. I'm interested. Can you tell me more about the financial benefits of solar roofing? Of course. With solar roofing, you can significantly reduce your energy bills as it generates electricity from the sun. This means you'll be relying less on traditional power sources, resulting in long-term savings. Additionally, there are various government incentives and tax credits available to make the switch to solar even more affordable. That sounds like a great opportunity to save money. Absolutely. By investing in solar roofing, you can start saving money on your energy bills and take advantage of government incentives and tax credits. It's a great opportunity to save money while also contributing to a healthier planet. I'm convinced. How can I get started with solar roofing? That's fantastic. To get started with solar roofing, our team of experts will handle the installation process seamlessly. They will ensure that your solar roofing is installed correctly and efficiently. Let's get you started on this exciting journey to a more sustainable and cost-effective energy solution. Let's do it. Good morning, afternoon. My name is Salesperson, and I'm here to talk to you about an exciting opportunity for your home. Have you ever considered switching to solar roofing? Good morning, afternoon. Thank you for reaching out. Yes, I have considered switching to solar roofing. Can you tell me more about the opportunity you are offering? Absolutely. Our solar roofing system is a revolutionary way to generate clean and renewable energy right from your own roof. It not only helps the environment, but also allows you to save significantly on your energy bills. Plus, by going solar, you may be eligible for various federal and state incentives that can further reduce the cost of installation. Let's schedule a free consultation to discuss how solar roofing can benefit your home. Thank you for considering this opportunity. That sounds interesting. I would like to schedule a free consultation to learn more about how solar roofing can benefit my home. Great. I'm glad you're interested. Let's schedule a free consultation at your convenience. Our team will provide you with all the information you need to make an informed decision. Thank you for considering solar roofing. Thank you. I appreciate your help. You're welcome. It's my pleasure to assist you. If you have any further questions, feel free to ask. Thank you. I will definitely reach out if I have any further questions. Sounds good. I'm here to help whenever you need it. Have a great day. Thank you. You too. Thank you. No, thank you.",
-        )
+    transcribed_word_timings = extract_word_timings(transcribed_data)
+    # print(transcribed_word_timings)
+    transcribed_text_with_pauses = chain_words_with_pauses(
+        word_data=transcribed_word_timings, pause_length_seconds=0.8
     )
+    print(transcribed_text_with_pauses)
+
+    # transcribed_text = transcribed_data["text"]
+    # # print(transcribed_text)
+
+    # print(
+    #     analyze_correctness(
+    #         spoken_text=transcribed_text,
+    #         script_input="It's come down to this, hasn't it? [pause] All the roads I've taken, all the choices I've made. [pause] And yet, here I stand, at the crossroads of my destiny.",
+    #     )
+    # )
