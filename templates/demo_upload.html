@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contract Submission</title>
+<style>
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f7fc;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.next-page-btn {
+	background-color: #5b64e4;
+	color: white;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	margin-top: 20px;
+	font-size: 16px; /* Larger font size for better visibility */
+	display: block; /* Makes the button a block element */
+	width: 100%; /* Full width */
+	box-sizing: border-box; /* Ensures padding does not add to the width */
+      }
+.next-page-btn:hover {
+	background-color: #4a56d3;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+      }
+
+.upload-container {
+  background-color: #ffffff;
+  width: 750px; /* Adjusted width to match the UI */
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); /* More prominent shadow */
+  text-align: center;
+}
+
+.upload-container h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.upload-box {
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  position: relative; /* For positioning the file input */
+}
+
+.drag-drop-text {
+  color: #7a7f9a;
+  margin-bottom: 10px;
+}
+
+.file-input { /* Hidden file input */
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.browse-btn {
+  background-color: #5b64e4;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.browse-btn:hover {
+  background-color: #4a56d3;
+}
+
+.file-list {
+  list-style: none;
+  padding: 0;
+  margin: 0; /* Remove default margin */
+}
+
+.file-list-item {
+  background-color: #f0f2f5;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.file-name {
+  color: #333;
+  margin-right: 10px; /* Added space between filename and progress bar */
+}
+
+.file-status {
+  color: #5b64e4;
+  font-size: 0.9em; /* Smaller font size for status text */
+}
+
+.progress-bar {
+  width: 100%;
+  background-color: #e6e7ee;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 5px;
+  background-color: #5b64e4;
+  width: 0; /* Start with no progress */
+  transition: width 0.4s ease; /* Smooth transition for progress bar */
+}
+
+/* Adjustments for responsiveness */
+@media (max-width: 800px) {
+  .upload-container {
+    width: 90%;
+    padding: 20px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="upload-container">
+  <h2>Submit Your Construction Proposal Draft</h2>
+  
+  <div class="upload-box">
+    <div class="drag-drop-text">Drag & Drop Your Construction Proposal Here</div>
+    <div class="drag-drop-text">Acceptable Formats: PDF, DOCX, up to 50MB</div>
+    <button class="browse-btn">Browse File</button>
+    <input type="file" class="file-input" onchange="uploadFile(this.files)">
+  </div>
+  
+  <ul class="file-list" id="file-list">
+    <!-- Files will be listed here -->
+  </ul>
+  <button class="next-page-btn" id="nextPageBtn" onclick="goToNextPage()">Next Page</button>
+</div>
+
+<script>
+
+
+function goToNextPage() {
+		window.location.href='demo_text_info.html'
+	      }
+// JavaScript to handle file uploads
+function uploadFile(files) {
+  if (files.length === 0) return;
+  
+  const fileList = document.getElementById('file-list');
+  Array.from(files).forEach(file => {
+    const listItem = document.createElement('li');
+    listItem.className = 'file-list-item';
+    
+    const fileName = document.createElement('span');
+    fileName.className = 'file-name';
+    fileName.textContent = file.name;
+    
+    const fileStatus = document.createElement('span');
+    fileStatus.className = 'file-status';
+    fileStatus.textContent = 'Uploading...';
+    
+    const progressBarContainer = document.createElement('div');
+    progressBarContainer.className = 'progress-bar';
+    
+    const progressBar = document.createElement('div');
+    progressBar.className = 'progress';
+    
+    progressBarContainer.appendChild(progressBar);
+    
+    listItem.appendChild(fileName);
+    listItem.appendChild(fileStatus);
+    listItem.appendChild(progressBarContainer);
+    
+    fileList.appendChild(listItem);
+    
+    // Simulate file upload progress
+    setTimeout(() => {
+      progressBar.style.width = '100%';
+      fileStatus.textContent = 'Completed';
+    }, 1500); // Simulated delay
+  });
+}
+
+// Add drag and drop functionality (requires additional styling and JS)
+const uploadBox = document.querySelector('.upload-box');
+uploadBox.addEventListener('dragover', (event) => {
+  event.preventDefault();
+  // Add styling to indicate drag is over this area
+});
+
+uploadBox.addEventListener('drop', (event) => {
+  event.preventDefault();
+  const files = event.dataTransfer.files;
+  uploadFile(files);
+});
+</script>
+
+</body>
+</html>
