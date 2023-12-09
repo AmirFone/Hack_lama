@@ -3,6 +3,8 @@ import os
 from moviepy.editor import VideoFileClip
 import subprocess
 
+from speech_to_text import extract_word_probabilities, transcribe_audio
+
 app = Flask(__name__)
 users = {"user": "password", "username": "password"}
 
@@ -85,6 +87,13 @@ def upload_video():
             ["ffmpeg", "-y", "-i", temp_video_path, "-q:a", "0", "-map", "a", mp3_path]
         )
 
+        transcribed_data = transcribe_audio(mp3_path)
+        # transcribed_word_timings = extract_word_timings(transcribed_data)
+        transcribed_word_clarity = extract_word_probabilities(
+            transcribed_data, probabilities_only=False
+        )
+        print(transcribed_word_clarity)
+
         # Optionally, remove the temporary webm file
         os.remove(temp_video_path)
         # Return success message
@@ -92,11 +101,12 @@ def upload_video():
 
     return jsonify({"error": "Invalid request"}), 400
 
-@app.route('/text', methods=['POST'])
+
+@app.route("/text", methods=["POST"])
 def process_text_or_pdf():
-    if 'text' in request.form:
+    if "text" in request.form:
         # If 'text' is in the form data, it's text
-        text = request.form['text']
+        text = request.form["text"]
 
         # Handle text processing logic here
         print("Received text:", text)
@@ -104,12 +114,12 @@ def process_text_or_pdf():
         # Return a success message
         return jsonify({"message": "Text received and processed successfully"}), 200
 
-    elif 'pdf' in request.files:
+    elif "pdf" in request.files:
         # If 'pdf' is in the uploaded files, it's a PDF
-        pdf_file = request.files['pdf']
+        pdf_file = request.files["pdf"]
 
         # Check if a PDF file is actually provided
-        if pdf_file and pdf_file.filename.endswith('.pdf'):
+        if pdf_file and pdf_file.filename.endswith(".pdf"):
             pdf_text = extract_text_from_pdf(pdf_file)
             print("Extracted text from PDF:", pdf_text)
 
@@ -119,6 +129,7 @@ def process_text_or_pdf():
             return jsonify({"message": "PDF received and processed successfully"}), 200
 
     return jsonify({"error": "Invalid request"}), 400
+
 
 def extract_text_from_pdf(pdf_file):
     # Use PyPDF2 or any other library to extract text from the PDF
@@ -130,7 +141,7 @@ def extract_text_from_pdf(pdf_file):
             pdf_text += page.extractText()
     except Exception as e:
         print("Error extracting text from PDF:", str(e))
-    
+
     return pdf_text
 
 
