@@ -42,11 +42,13 @@ function showWebcam() {
 }
 
 function startWebcam() {
-    navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
         .then(stream => {
             const video = document.getElementById('webcam');
             video.srcObject = stream;
             video.play();
+
+            video.muted = true;
         })
         .catch(err => {
             console.error('Error accessing the webcam', err);
@@ -67,7 +69,7 @@ function startRecording() {
     recordedBlobs = [];
     const video = document.getElementById('webcam');
     let stream = video.srcObject;
-    mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+    mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm; codecs=vp8,opus' });
     mediaRecorder.ondataavailable = handleDataAvailable;
     mediaRecorder.start();
 

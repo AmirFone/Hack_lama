@@ -1,6 +1,7 @@
 from flask import Flask, request, redirect, url_for, render_template, jsonify
 import os
 from moviepy.editor import VideoFileClip
+import subprocess
 
 app = Flask(__name__)
 users = {"user": "password", "username": "password"}
@@ -49,35 +50,43 @@ def upload_video():
     if "video" not in request.files:
         return jsonify({"error": "No video part"}), 400
 
-    video = request.files["video"]
+    video_file = request.files["video"]
 
-
-
-    if video.filename == "":
+    if video_file.filename == "":
         return jsonify({"error": "No selected video"}), 400
-    
 
-    if video:  # If a video is actually present
-        
-        
+    if video_file:  # If a video is actually present
         video_dir = ".video"
-        if not os.path.exists(video_dir):
-            os.makedirs(video_dir)
-        # Save the original video
-        video_path = os.path.join(".video", f"script_video.mp4")
-        video.save(video_path)
+        os.makedirs(video_dir, exist_ok=True)
 
-        # Load the video file
-        clip = VideoFileClip(video_path)
+        # Save the video to a temporary path
+        temp_video_path = os.path.join(video_dir, "temp_video.webm")
+        video_file.save(temp_video_path)
 
-        # Extract audio from the video
-        
-        audio_dir = ".audio"
-        if not os.path.exists(video_dir):
-            os.makedirs(video_dir)
-        audio_path = os.path.join(".audio", f"script_audio.mp3")
-        clip.audio.write_audiofile(audio_path)
+        # Convert the video to MP4
+        mp4_path = os.path.join(video_dir, "converted_video.mp4")
+        subprocess.run(
+            [
+                "ffmpeg",
+                "-y",
+                "-i",
+                temp_video_path,
+                "-c:v",
+                "libx264",
+                "-strict",
+                "-2",
+                mp4_path,
+            ]
+        )
 
+        # Extract audio as MP3
+        mp3_path = os.path.join(video_dir, "extracted_audio.mp3")
+        subprocess.run(
+            ["ffmpeg", "-y", "-i", temp_video_path, "-q:a", "0", "-map", "a", mp3_path]
+        )
+
+        # Optionally, remove the temporary webm file
+        os.remove(temp_video_path)
         # Return success message
         return jsonify({"message": "Video and audio uploaded successfully"}), 200
 
@@ -126,4 +135,4 @@ def extract_text_from_pdf(pdf_file):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5003)
