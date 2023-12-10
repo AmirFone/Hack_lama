@@ -125,22 +125,35 @@
                 <h3>Direction Distribution</h3>
                 <canvas id="directionChart"></canvas>
             </div>
+	        <!-- Time Per Word Chart Section -->
+	    <div class="section">
+		<h3>Time Per Word</h3>
+		<canvas id="timePerWordChart"></canvas>
+	    </div>
         </div>
 
         <div class="divider"></div>
 
         <!-- Transcribed Script Section -->
         <div class="section">
-            <h3>Transcribed Script</h3>
+            <h3>Transcribed Script Analytics</h3>
             <div class="section" id="transcriptLegend">
                 <h3>Transcript Clarity Legend</h3>
                 <div id="legendContainer"></div>
             </div>
-            <div id="transcribedScript"></div>
+            <div id="transcribedScript"></div>	    
         </div>
-
-        <div class="divider"></div>
-
+	<div class="divider"></div>
+	<!-- New div for timing-based highlighting -->
+	<div class="section">
+		<h3>Transcript Duration Legend</h3>
+	<div id="times_per_word"></div>
+	    <div id="transcribedScript"></div>
+	    <div class="section" id="timingLegend">
+		<h3>Transcript Timing Legend</h3>
+	    </div>
+	</div>
+	    <div class="divider"></div>
         <!-- Feedback Section -->
         <div class="section" id="feedbackSection">
             <h3>Feedback</h3>
@@ -281,11 +294,109 @@
                 feedbackContainer.textContent = 'No feedback available.';
             }
         }
+	function highlightTiming(transcribedWordTimings) {
+		const timingContainer = document.getElementById('times_per_word');
+		timingContainer.innerHTML = ''; // Clear any existing content
+	
+		transcribedWordTimings.forEach(wordData => {
+		    const word = wordData[0];
+		    const startTime = wordData[1];
+		    const endTime = wordData[2];
+		    const duration = endTime - startTime;
+		    const backgroundColor = getColorForDuration(duration);
+		    const span = document.createElement('span');
+		    span.textContent = word + ' ';
+		    span.style.backgroundColor = backgroundColor;
+		    span.style.padding = '0.2em';
+		    span.style.margin = '0.1em';
+		    span.style.borderRadius = '0.3em'; // Rounded corners for highlight
+		    timingContainer.appendChild(span);
+		});
+	    }
+	
+		// Function to get color based on duration
+		function getColorForDuration(duration) {
+			// Define duration thresholds and corresponding colors
+			if (duration <= 0.6) return 'rgba(255, 69, 0, 0.2)';   // Red-Orange for fastest
+			else if (duration <= 0.8) return 'rgba(255, 140, 0, 0.2)';  // Dark Orange for fast
+			else if (duration <= 0.81) return 'rgba(255, 215, 0, 0.2)';   // Gold for medium
+			else return 'rgba(65, 105, 225, 0.2)';  // Royal Blue for slow
+		}	
+	    // Function to create the legend for timing
+	    function createTimingLegend() {
+		const legendContainer = document.getElementById('timingLegend');
+		const ranges = [
+			{ duration: '0.0 - 0.6 sec', color: 'rgba(255, 140, 0, 0.2)' },  // Dark Orange, medium-fast
+			{ duration: '0.61 - .8 sec', color: 'rgba(255, 215, 0, 0.2)' },   // Gold, medium
+			{ duration: '0.81+ sec', color: 'rgba(65, 105, 225, 0.2)' }       // Royal Blue, slow
+		];
+		legendContainer.innerHTML = '';
+	
+		ranges.forEach(range => {
+		    const legendItem = document.createElement('div');
+		    legendItem.style.display = 'flex';
+		    legendItem.style.alignItems = 'center';
+		    legendItem.style.marginBottom = '5px';
+	
+		    const colorBox = document.createElement('div');
+		    colorBox.style.backgroundColor = range.color;
+		    colorBox.style.width = '25px';
+		    colorBox.style.height = '25px';
+		    colorBox.style.marginRight = '10px';
+		    colorBox.style.borderRadius = '0.3em';
+	
+		    const label = document.createElement('span');
+		    label.textContent = range.duration;
+		    label.style.fontSize = '0.8em';
+	
+		    legendItem.appendChild(colorBox);
+		    legendItem.appendChild(label);
+		    legendContainer.appendChild(legendItem);
+		});
+	    }
+	function createTimePerWordChart(timesPerWord) {
+		const ctx = document.getElementById('timePerWordChart').getContext('2d');
+		new Chart(ctx, {
+		    type: 'bar',
+		    data: {
+			labels: timesPerWord.map(item => item[0]),
+			datasets: [{
+			    label: 'Time Per Word (seconds)',
+			    data: timesPerWord.map(item => item[1]),
+			    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+			    borderColor: 'rgba(54, 162, 235, 1)',
+			    borderWidth: 1
+			}]
+		    },
+		    options: {
+			scales: {
+			    y: {
+				beginAtZero: true
+			    }
+			},
+			plugins: {
+			    legend: {
+				display: true,
+				labels: {
+				    color: 'rgb(255, 99, 132)'
+				}
+			    }
+			}
+		    }
+		});
+	    }
+	
+	createTimePerWordChart(data.times_per_word);
+
 
         // Call the functions to color code the transcript and create the legend
         highlightTranscript(data.words_and_clarity_scores);
         createClarityLegend();
-        displayFeedback(data.feedback);
+	
+	highlightTiming(data.transcribed_word_timings);
+	createTimingLegend();
+        
+	displayFeedback(data.feedback);
     </script>
 
     <div class="footer">
