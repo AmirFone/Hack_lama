@@ -2,8 +2,10 @@ from flask import Flask, request, redirect, url_for, render_template, jsonify
 import os
 from moviepy.editor import VideoFileClip
 import subprocess
-
 from speech_to_text import extract_word_probabilities, transcribe_audio
+import facial_expressions
+from input_processing import extract_and_save_frames
+
 
 app = Flask(__name__)
 users = {"user": "password", "username": "password"}
@@ -12,38 +14,6 @@ users = {"user": "password", "username": "password"}
 @app.route("/")
 def home():
     return render_template("index.html")  # Render the sign-in page
-
-
-# @app.route('/login', methods=['POST'])
-# def login():
-#     username = request.form['username']
-#     password = request.form['password']
-#     if username in users and users[username] == password:
-#         return redirect(url_for('authenticated'))
-#     return redirect(url_for('home'))
-
-# @app.route('/authenticated')
-# def authenticated():
-#     return render_template('demo_upload.html')  # Render the authenticated page
-
-# @app.route('/video', methods=['POST'])
-# def upload_video():
-#     if 'video' not in request.files:
-#         return jsonify({"error": "No video part"}), 400
-
-#     video = request.files['video']
-
-#     if video.filename == '':
-#         return jsonify({"error": "No selected video"}), 400
-
-#     if video:  # If a video is actually present
-#         video_path = os.path.join('.video', f'script_video.mp4')
-#         video.save(video_path)
-
-#         # we return our info
-#         return jsonify({"message": "Video uploaded successfully"}), 200
-
-#     return jsonify({"error": "Invalid request"}), 400
 
 
 @app.route("/video", methods=["POST"])
@@ -99,7 +69,17 @@ def upload_video():
         # Return success message
         return jsonify({"message": "Video and audio uploaded successfully"}), 200
 
+
+    file_paths = extract_and_save_frames(
+        video_path="demo_video.mp4", word_timings=transcribed_word_timings
+    )
+    video_analysis, eye_engagement = facial_expressions.process_images(file_paths)
+    print(video_analysis, eye_engagement)
+    
+    
+    
     return jsonify({"error": "Invalid request"}), 400
+
 
 
 @app.route("/text", methods=["POST"])
