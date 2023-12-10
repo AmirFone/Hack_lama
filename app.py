@@ -7,14 +7,16 @@ import PyPDF2
 import boto3
 import random
 import tempfile
-
+sys.path.append('/Users/amirhossain/Desktop/Hack_lama')
 from input_processing import extract_text_from_pdf, upload_file_to_s3, upload_python_object_to_s3
-
-s3_client = boto3.client("s3")
 from get_statistics import get_statistics
+from feedback import llama_feedback
+
 
 global Script_TEXT
 Script_TEXT = ""
+s3_client = boto3.client("s3")
+
 
 app = Flask(__name__)
 
@@ -22,8 +24,8 @@ app = Flask(__name__)
 
 @app.route("/generate_script", methods=["GET"])
 def generate_script():
-    # Here you would generate your script text or get it from where it's stored
-    script_text = "The script text that you want to paste in the text area."
+    script_text = llama_feedback()
+    print("script_text",script_text)
     return script_text
 
 @app.route("/")
