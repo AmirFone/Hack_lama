@@ -137,3 +137,13 @@ uploadBox.addEventListener('drop', (event) => {
     const files = event.dataTransfer.files;
     uploadFile(files);
 });
+function generateScript() {
+    // This function will make a request to /generate_script endpoint and handle the response
+    fetch('/generate_script')
+    .then(response => response.text())
+    .then(data => {
+        // Assuming the endpoint returns the script text as a response
+        document.querySelector('.text-area').value = data; // Pasting the text in the textarea
+    })
+    .catch(error => console.error('Error:', error));
+}
