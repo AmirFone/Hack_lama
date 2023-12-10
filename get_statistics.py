@@ -50,6 +50,6 @@ def get_statistics(script):
         "transcribed_text_with_pauses": transcribed_text_with_pauses,
         "script_correctness_score": script_correctness,
         # "speaker_sentiments": sentiments,
-    }
+    }.    
 
     return statistics
