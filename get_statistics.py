@@ -1,6 +1,8 @@
 import os
+import json
 import subprocess
 import facial_expressions
+from feedback import llama_feedback
 from input_processing import extract_and_save_frames
 from script_correctness import analyze_correctness
 from speech_to_text import (
@@ -66,7 +68,5 @@ def get_statistics(script):
         "average_direction": average_direction,
         "average_emotion": average_emotion,
     }
-
-    print(video_analysis)
-
+    statistics['feedback']=llama_feedback(json.dumps(statistics, indent=4))
     return statistics

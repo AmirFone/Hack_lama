@@ -2,10 +2,14 @@ from flask import Flask, request, redirect, url_for, render_template, jsonify
 import os
 from moviepy.editor import VideoFileClip
 import subprocess
-from speech_to_text import extract_word_probabilities, transcribe_audio
-import facial_expressions
-from input_processing import extract_and_save_frames
+import sys
+import PyPDF2
+import json
+sys.path.append('/Users/amirhossain/Desktop/Hack_lama')
 
+from get_statistics import get_statistics
+global Script_TEXT  # Declare the variable as global
+Script_TEXT = ""    # Initialize the variable
 
 app = Flask(__name__)
 users = {"user": "password", "username": "password"}
@@ -18,6 +22,7 @@ def home():
 
 @app.route("/video", methods=["POST"])
 def upload_video():
+    global Script_TEXT
     global clip_counter
     if "video" not in request.files:
         return jsonify({"error": "No video part"}), 400
@@ -57,24 +62,36 @@ def upload_video():
             ["ffmpeg", "-y", "-i", temp_video_path, "-q:a", "0", "-map", "a", mp3_path]
         )
 
-        transcribed_data = transcribe_audio(mp3_path)
+        # transcribed_data = transcribe_audio(mp3_path)
         # transcribed_word_timings = extract_word_timings(transcribed_data)
-        transcribed_word_clarity = extract_word_probabilities(
-            transcribed_data, probabilities_only=False
-        )
-        print(transcribed_word_clarity)
+        # transcribed_word_clarity = extract_word_probabilities(
+        #     transcribed_data, probabilities_only=False
+        # )
+        # print(transcribed_word_clarity)
 
         # Optionally, remove the temporary webm file
         os.remove(temp_video_path)
         # Return success message
-        return jsonify({"message": "Video and audio uploaded successfully"}), 200
+        # return render_template('results.html', data=get_statistics("hey")
+    return redirect(url_for('results'))
+
+@app.route("/results")
+def results():
+    global Script_TEXT
+    # Logic for processing the results page
+    data= get_statistics(Script_TEXT)
+    print(f'weirweu_kvnk{data}')
+    # data_json = json.dumps(data)  # Convert Python dictionary to JSON object
+    return render_template("results.html", data=data)
 
 
-    file_paths = extract_and_save_frames(
-        video_path="demo_video.mp4", word_timings=transcribed_word_timings
-    )
-    video_analysis, eye_engagement = facial_expressions.process_images(file_paths)
-    print(video_analysis, eye_engagement)
+
+
+    # file_paths = extract_and_save_frames(
+    #     video_path="demo_video.mp4", word_timings=transcribed_word_timings
+    # )
+    # video_analysis, eye_engagement = facial_expressions.process_images(file_paths)
+    # print(video_analysis, eye_engagement)
     
     
     
@@ -84,12 +101,14 @@ def upload_video():
 
 @app.route("/text", methods=["POST"])
 def process_text_or_pdf():
+    global Script_TEXT
     if "text" in request.form:
         # If 'text' is in the form data, it's text
         text = request.form["text"]
 
         # Handle text processing logic here
-        print("Received text:", text)
+        # print("Received text:", text)
+        Script_TEXT = text
 
         # Return a success message
         return jsonify({"message": "Text received and processed successfully"}), 200
@@ -101,7 +120,8 @@ def process_text_or_pdf():
         # Check if a PDF file is actually provided
         if pdf_file and pdf_file.filename.endswith(".pdf"):
             pdf_text = extract_text_from_pdf(pdf_file)
-            print("Extracted text from PDF:", pdf_text)
+            Script_TEXT = pdf_text
+            # print("Extracted text from PDF:", pdf_text)
 
             # Handle PDF text processing logic here
 

@@ -1,69 +1,258 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Document Editor</title>
-<style>
-	body {
-		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-		background-color: #f5f5f5;
-		margin: 0;
-		padding: 20px;
-	}
-	.editor-container {
-		background-color: #fff;
-		border: 1px solid #ddd;
-		border-radius: 5px;
-		padding: 20px;
-	}
-	.editor-header {
-		border-bottom: 1px solid #ddd;
-		padding-bottom: 10px;
-		margin-bottom: 20px;
-	}
-	.editor-content {
-		min-height: 300px;
-	}
-	.suggestion-box {
-		background-color: #f8f9fa;
-		border: 1px solid #ccc;
-		border-radius: 5px;
-		padding: 10px;
-		margin-top: 20px;
-	}
-	.suggestion {
-		color: #555;
-		font-size: 0.9em;
-	}
-	.corrected-word {
-		color: #d9534f;
-		text-decoration: underline;
-		cursor: pointer;
-	}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Analysis Results</title>
+    <!-- Include Chart.js from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            width: 80%;
+            max-width: 1200px; /* Adjust width as necessary */
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .charts-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            flex-wrap: wrap; /* Wrap charts for smaller screens */
+            gap: 20px; /* Space between charts */
+        }
+
+        .section {
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .divider {
+            height: 2px;
+            background: #e0e0e0;
+            margin: 20px 0;
+        }
+
+        canvas {
+            width: 100%;
+            height: auto;
+        }
+
+        @media (max-width: 800px) {
+            .charts-container {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<div class="editor-container">
-	<div class="editor-header">
-		<h1>Untitled Document</h1>
-	</div>
-	<div class="editor-content" contenteditable="true">
-		<!-- Content editable area where users can type their document -->
-	</div>
-	<div class="suggestion-box">
-		<span class="suggestion">
-			The word <span class="corrected-word">adoпting</span> doesn't seem to fit this context. Consider replacing it with a different one.
-		</span>
-	</div>
-</div>
+    <div class="container">
+        <h2>Speech Analysis Results</h2>
 
-<script>
-	document.querySelector('.corrected-word').addEventListener('click', function() {
-		alert('This would trigger a spell check correction.');
-	});
-</script>
+        <!-- Charts Container -->
+        <div class="charts-container">
+            <!-- Clarity Score Chart Section -->
+            <div class="section">
+                <h3>Word Clarity Scores</h3>
+                <canvas id="clarityChart"></canvas>
+            </div>
+
+            <!-- Emotion Distribution Chart Section -->
+            <div class="section">
+                <h3>Emotion Distribution</h3>
+                <canvas id="emotionChart"></canvas>
+            </div>
+
+            <!-- Direction Distribution Chart Section -->
+            <div class="section">
+                <h3>Direction Distribution</h3>
+                <canvas id="directionChart"></canvas>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Transcribed Script Section -->
+        <div class="section">
+            <h3>Transcribed Script</h3>
+	    <div class="section" id="transcriptLegend">
+		<h3>Transcript Clarity Legend</h3>
+		<div id="legendContainer"></div>
+	    </div>
+            <div id="transcribedScript"></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Feedback Section -->
+	<div class="section" id="feedbackSection">
+		<h3>Feedback</h3>
+		<div id="feedbackContent"></div>
+	    </div>
+    </div>
+    <script>
+        const data = JSON.parse('{{ data | tojson | safe }}');
+	console.log('data==');
+	console.log(data);
+        
+        // Dynamically populate the transcribed script
+        document.getElementById('transcribedScript').innerText = data.transcribed_text;
+
+        // Clarity Chart
+        const clarityCtx = document.getElementById('clarityChart').getContext('2d');
+        new Chart(clarityCtx, {
+            type: 'bar',
+            data: {
+                labels: data.words_and_clarity_scores.map(item => item[0]),
+                datasets: [{
+                    label: 'Clarity Score',
+                    data: data.words_and_clarity_scores.map(item => item[1]),
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Emotion Chart
+        const emotionCtx = document.getElementById('emotionChart').getContext('2d');
+        new Chart(emotionCtx, {
+            type: 'pie',
+            data: {
+                labels: Object.keys(data.emotion_percentages),
+                datasets: [{
+                    data: Object.values(data.emotion_percentages),
+                    backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 205, 86, 0.2)'],
+                    borderColor: ['rgba(255,99,132,1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 205, 86, 1)'],
+                    borderWidth: 1
+                }]
+            }
+        });
+
+        // Direction Chart
+        const directionCtx = document.getElementById('directionChart').getContext('2d');
+        new Chart(directionCtx, {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(data.direction_percentages),
+                datasets: [{
+                    data: Object.values(data.direction_percentages),
+                    backgroundColor: ['rgba(153, 102, 255, 0.2)'],
+                    borderColor: ['rgba(153, 102, 255, 1)'],
+                    borderWidth: 1
+                }]
+            }
+        });
+	function getHighlightColorForProbability(probability) {
+		if (probability <= 0.2) return 'rgba(255, 0, 0, 0.2)'; // Red with 20% transparency
+		else if (probability <= 0.4) return 'rgba(255, 165, 0, 0.2)'; // Orange with 20% transparency
+		else if (probability <= 0.6) return 'rgba(255, 255, 0, 0.2)'; // Yellow with 20% transparency
+		else if (probability <= 0.8) return 'rgba(144, 238, 144, 0.2)'; // Light Green with 20% transparency
+		else return 'rgba(0, 128, 0, 0.2)'; // Dark Green with 20% transparency
+	    }
+	
+	    // Function to create the highlighted transcript
+	    function highlightTranscript(wordsAndClarityScores) {
+		const transcriptContainer = document.getElementById('transcribedScript');
+		transcriptContainer.innerHTML = ''; // Clear any existing content
+	
+		wordsAndClarityScores.forEach(wordData => {
+		    const word = wordData[0];
+		    const score = wordData[1];
+		    const backgroundColor = getHighlightColorForProbability(score);
+		    const span = document.createElement('span');
+		    span.textContent = word + ' ';
+		    span.style.backgroundColor = backgroundColor;
+		    span.style.padding = '0.2em';
+		    span.style.margin = '0.1em';
+		    span.style.borderRadius = '0.3em'; // Rounded corners for highlight
+		    transcriptContainer.appendChild(span);
+		});
+	    }
+	
+	    // Call highlightTranscript with your words and clarity scores
+	    highlightTranscript(data.words_and_clarity_scores);
+	    function createClarityLegend() {
+		const legendContainer = document.getElementById('legendContainer');
+		const ranges = [
+		    { score: '0.0 - 0.2', color: 'rgba(255, 0, 0, 0.2)' },
+		    { score: '0.2 - 0.4', color: 'rgba(255, 165, 0, 0.2)' },
+		    { score: '0.4 - 0.6', color: 'rgba(255, 255, 0, 0.2)' },
+		    { score: '0.6 - 0.8', color: 'rgba(144, 238, 144, 0.2)' },
+		    { score: '0.8 - 1.0', color: 'rgba(0, 128, 0, 0.2)' }
+		];
+	
+		ranges.forEach(range => {
+		    const legendItem = document.createElement('div');
+		    legendItem.style.display = 'flex';
+		    legendItem.style.alignItems = 'center';
+		    legendItem.style.marginBottom = '5px';
+	
+		    const colorBox = document.createElement('div');
+		    colorBox.style.backgroundColor = range.color;
+		    colorBox.style.width = '25px';
+		    colorBox.style.height = '25px';
+		    colorBox.style.marginRight = '10px';
+		    colorBox.style.borderRadius = '0.3em';
+	
+		    const label = document.createElement('span');
+		    label.textContent = range.score;
+		    label.style.fontSize = '0.8em';
+	
+		    legendItem.appendChild(colorBox);
+		    legendItem.appendChild(label);
+		    legendContainer.appendChild(legendItem);
+		});
+	    }
+	    function displayFeedback(feedback) {
+		const feedbackContainer = document.getElementById('feedbackContent');
+		feedbackContainer.innerHTML = ''; // Clear any existing content
+	
+		// Check if feedback is an array and has content
+		if(Array.isArray(feedback) && feedback.length) {
+		    feedback.forEach(item => {
+			const paragraph = document.createElement('p');
+			paragraph.textContent = item;
+			feedbackContainer.appendChild(paragraph);
+		    });
+		} else {
+		    // If no feedback is present, display a default message
+		    feedbackContainer.textContent = 'No feedback available.';
+		}
+	    }
+	
+	
+	    // Call the functions to color code the transcript and create the legend
+	    highlightTranscript(data.words_and_clarity_scores);
+	    createClarityLegend();
+	    displayFeedback(data.feedback);
+    </script>
 
 </body>
 </html>
