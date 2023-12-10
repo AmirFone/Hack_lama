@@ -3,7 +3,6 @@ from flask import Flask, flash, request, redirect, url_for, render_template, jso
 import os
 import subprocess
 import boto3
-
 from input_processing import (
     extract_text_from_pdf,
     upload_file_to_s3,

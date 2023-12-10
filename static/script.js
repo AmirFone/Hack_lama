@@ -150,7 +150,9 @@ function generateScript() {
     .then(response => response.text())
     .then(data => {
         // Assuming the endpoint returns the script text as a response
-        document.querySelector('.text-area').value = data; // Pasting the text in the textarea
+        document.querySelector('.text-area').value = data;
+        showWebcam();
+         // Pasting the text in the textarea
     })
     .catch(error => console.error('Error:', error));
 }
