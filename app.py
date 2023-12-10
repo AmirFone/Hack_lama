@@ -5,8 +5,11 @@ import subprocess
 import sys
 import PyPDF2
 import json
+import boto3
+import random
+import tempfile
 sys.path.append('/Users/amirhossain/Desktop/Hack_lama')
-
+s3_client = boto3.client('s3')
 from get_statistics import get_statistics
 global Script_TEXT  # Declare the variable as global
 Script_TEXT = ""    # Initialize the variable
@@ -17,7 +20,15 @@ users = {"user": "password", "username": "password"}
 
 @app.route("/")
 def home():
+    return render_template("login.html")  # Render the sign-in page
+
+
+
+@app.route("/script")
+def script():
     return render_template("index.html")  # Render the sign-in page
+
+
 
 
 @app.route("/video", methods=["POST"])
@@ -38,6 +49,7 @@ def upload_video():
 
         # Save the video to a temporary path
         temp_video_path = os.path.join(video_dir, "temp_video.webm")
+        
         video_file.save(temp_video_path)
 
         # Convert the video to MP4
@@ -55,6 +67,11 @@ def upload_video():
                 mp4_path,
             ]
         )
+        upload_success = upload_file_to_s3(temp_video_path, "hackllama")
+        if upload_success:
+            print("Video uploaded successfully.")
+        else:
+            print("Failed to upload video.")
 
         # Extract audio as MP3
         mp3_path = os.path.join(video_dir, "extracted_audio.mp3")
@@ -78,23 +95,9 @@ def upload_video():
 @app.route("/results")
 def results():
     global Script_TEXT
-    # Logic for processing the results page
     data= get_statistics(Script_TEXT)
     print(f'weirweu_kvnk{data}')
-    # data_json = json.dumps(data)  # Convert Python dictionary to JSON object
-    return render_template("results.html", data=data)
-
-
-
-
-    # file_paths = extract_and_save_frames(
-    #     video_path="demo_video.mp4", word_timings=transcribed_word_timings
-    # )
-    # video_analysis, eye_engagement = facial_expressions.process_images(file_paths)
-    # print(video_analysis, eye_engagement)
-    
-    
-    
+    return render_template("results.html", data=data)  
     return jsonify({"error": "Invalid request"}), 400
 
 
@@ -126,7 +129,17 @@ def process_text_or_pdf():
             # Handle PDF text processing logic here
 
             # Return a success message
-            return jsonify({"message": "PDF received and processed successfully"}), 200
+        
+        
+    tmp_file = tempfile.mkstemp()[1]
+    with open(tmp_file, 'w') as f:
+        f.write(script_text)
+    upload_success = upload_file_to_s3(tmp_file, "hackllama")
+    os.remove(tmp_file)
+    if upload_success:
+        print("text uploaded successfully.")
+    else:
+        print("text to upload video.")
 
     return jsonify({"error": "Invalid request"}), 400
 
@@ -143,6 +156,20 @@ def extract_text_from_pdf(pdf_file):
         print("Error extracting text from PDF:", str(e))
 
     return pdf_text
+
+
+
+def upload_file_to_s3(file_path, bucket_name, object_name=None):
+    if object_name is None:
+        object_name = str(random.randint(10000, 99999))+os.path.basename(file_path)
+
+    try:
+        response = s3_client.upload_file(file_path, bucket_name, object_name)
+    except Exception as e:
+        print(f"Error uploading file to S3: {e}")
+        return False
+    return True
+
 
 
 if __name__ == "__main__":

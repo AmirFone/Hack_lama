@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #e6e7ee; /* Adjusted to a light grey background */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  min-height: 100%;
+  position: relative;
+}
+
+.button {
+  background-color: #5b64e4;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  font-size: 16px; /* Larger font size for better visibility */
+  display: block; /* Makes the button a block element */
+  width: 100%; /* Full width */
+  box-sizing: border-box; /* Ensures padding does not add to the width */
+}
+
+.button:hover {
+  background-color: #4a56d3;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+
+.signup-container {
+  background-color: #ffffff;
+  width: 400px;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+  margin: auto;
+  padding-bottom: 100px; /* Adjusted bottom padding to account for footer */
+}
+
+h2 {
+  color: #333; /* Dark grey color for the text */
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+input[type=text], input[type=password] {
+  width: calc(100% - 20px);
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc; /* Lighter border color */
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.already-account {
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  color: #333; /* Dark grey color for text */
+}
+
+a {
+  color: #5b64e4; /* Same blue color as the submit button for consistency */
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Footer styling */
+.footer {
+  text-align: center;
+  padding: 20px;
+  background-color: #f2f2f2; /* Light grey background */
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.footer p {
+  color: #333; /* Dark grey color for text */
+  margin: 0; /* Remove default margin */
+  font-size: 14px;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .signup-container {
+    width: 95%;
+    padding: 20px;
+  }
+}
+</style>
+</head>
+<body>
+
+  <div class="signup-container">
+    <h2>Sign Up</h2>
+    <div>
+      <input type="text" id="name" name="name" placeholder="Name">
+      <input type="text" id="email" name="email" placeholder="Phone Number or Email">
+      <input type="password" id="password" name="password" placeholder="Password">
+      <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password">
+      <button type="button" class="button" onclick="window.location.href='/script';">Next</button>
+      <span class="already-account">Already have an account? <a href="/login">Log in</a></span>
+    </div>
+  </div>
+
+  <div class="footer">
+        <p>&copy; 2023 LLM Website. All rights reserved to LLama.</p>
+        <p>Contact us: CT@LLAMA.com</p>
+    </div>
+
+</body>
+</html>
