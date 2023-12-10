@@ -3,7 +3,6 @@ import os
 import subprocess
 import boto3
 import sys
-sys.path.append('/Users/amirhossain/Desktop/Hack_lama')
 from input_processing import (
     extract_text_from_pdf,
     upload_file_to_s3,
