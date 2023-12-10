@@ -32,7 +32,7 @@ def get_statistics(script):
     )
     average_word_clarity = sum(value for _, value in transcribed_word_clarity) / len(
         transcribed_word_clarity
-    )  # Assumes probabilities_only=False
+    )  if len(transcribed_word_clarity) > 0 else 1 # Assumes probabilities_only=False
 
     script_correctness = analyze_correctness(
         spoken_text=transcribed_text_with_pauses,
