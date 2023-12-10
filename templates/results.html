@@ -115,7 +115,39 @@
                 }]
             }
         });
-
+		function createTimePerWordChart(timesPerWord) {
+		const ctx = document.getElementById('timePerWordChart').getContext('2d');
+		new Chart(ctx, {
+		    type: 'bar',
+		    data: {
+			labels: timesPerWord.map(item => item[0]),
+			datasets: [{
+			    label: 'Time Per Word (seconds)',
+			    data: timesPerWord.map(item => item[1]),
+			    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+			    borderColor: 'rgba(54, 162, 235, 1)',
+			    borderWidth: 1
+			}]
+		    },
+		    options: {
+			scales: {
+			    y: {
+				beginAtZero: true
+			    }
+			},
+			plugins: {
+			    legend: {
+				display: true,
+				labels: {
+				    color: 'rgb(255, 99, 132)'
+				}
+			    }
+			}
+		    }
+		});
+	    }
+	
+	createTimePerWordChart(data.times_per_word);
         // Direction Chart
         const directionCtx = document.getElementById('directionChart').getContext('2d');
         new Chart(directionCtx, {
@@ -264,41 +296,6 @@
 		    legendContainer.appendChild(legendItem);
 		});
 	    }
-	function createTimePerWordChart(timesPerWord) {
-		const ctx = document.getElementById('timePerWordChart').getContext('2d');
-		new Chart(ctx, {
-		    type: 'bar',
-		    data: {
-			labels: timesPerWord.map(item => item[0]),
-			datasets: [{
-			    label: 'Time Per Word (seconds)',
-			    data: timesPerWord.map(item => item[1]),
-			    backgroundColor: 'rgba(54, 162, 235, 0.5)',
-			    borderColor: 'rgba(54, 162, 235, 1)',
-			    borderWidth: 1
-			}]
-		    },
-		    options: {
-			scales: {
-			    y: {
-				beginAtZero: true
-			    }
-			},
-			plugins: {
-			    legend: {
-				display: true,
-				labels: {
-				    color: 'rgb(255, 99, 132)'
-				}
-			    }
-			}
-		    }
-		});
-	    }
-	
-	createTimePerWordChart(data.times_per_word);
-
-
         // Call the functions to color code the transcript and create the legend
         highlightTranscript(data.words_and_clarity_scores);
         createClarityLegend();
@@ -308,11 +305,6 @@
         
 	displayFeedback(data.feedback);
     </script>
-
-    <div class="footer">
-        <p>&copy; 2023 LLM Website. All rights reserved to Script.AI.</p>
-        <p>Contact us: CT@LLAMA.com</p>
-    </div>
 </body>
 
 </html>
