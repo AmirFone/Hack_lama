@@ -60,32 +60,39 @@
             width: 100%;
             height: auto;
         }
-	.footer {
-		text-align: center;
-		padding: 20px;
-		background-color: #f2f2f2; /* Light grey background */
-		position: absolute;
-		bottom: 0;
-		width: 100%;
-		box-sizing: border-box;
-	      }
-	      
-	    
-	    
-	    .footer p {
-		color: #333; /* Dark grey color for text */
-		margin: 0; /* Remove default margin */
-		font-size: 14px;
-	      }
-	    
-	    html, body {
-		min-height: 100%;
-		position: relative;
-	      }
-	      
-	    .signup-container {
-		padding-bottom: 80px; /* Footer height + some extra space */
-	      }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #f2f2f2;
+            /* Light grey background */
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+
+
+        .footer p {
+            color: #333;
+            /* Dark grey color for text */
+            margin: 0;
+            /* Remove default margin */
+            font-size: 14px;
+        }
+
+        html,
+        body {
+            min-height: 100%;
+            position: relative;
+        }
+
+        .signup-container {
+            padding-bottom: 80px;
+            /* Footer height + some extra space */
+        }
+
         @media (max-width: 800px) {
             .charts-container {
                 flex-direction: column;
@@ -179,8 +186,8 @@
                 labels: Object.keys(data.emotion_percentages),
                 datasets: [{
                     data: Object.values(data.emotion_percentages),
-                    backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 205, 86, 0.2)'],
-                    borderColor: ['rgba(255,99,132,1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 205, 86, 1)'],
+                    backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 205, 86, 0.2)', 'rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)', 'rgba(201, 203, 207, 0.2)', 'rgba(33, 37, 41, 0.2)'],
+                    borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 205, 86, 1)', 'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)', 'rgba(201, 203, 207, 1)', 'rgba(33, 37, 41, 1)'],
                     borderWidth: 1
                 }]
             }
@@ -194,8 +201,8 @@
                 labels: Object.keys(data.direction_percentages),
                 datasets: [{
                     data: Object.values(data.direction_percentages),
-                    backgroundColor: ['rgba(153, 102, 255, 0.2)'],
-                    borderColor: ['rgba(153, 102, 255, 1)'],
+                    backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 205, 86, 0.2)', 'rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)', 'rgba(201, 203, 207, 0.2)', 'rgba(33, 37, 41, 0.2)'],
+                    borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 205, 86, 1)', 'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)', 'rgba(201, 203, 207, 1)', 'rgba(33, 37, 41, 1)'],
                     borderWidth: 1
                 }]
             }
@@ -261,23 +268,19 @@
                 legendContainer.appendChild(legendItem);
             });
         }
+
         function displayFeedback(feedback) {
             const feedbackContainer = document.getElementById('feedbackContent');
-            feedbackContainer.innerHTML = ''; // Clear any existing content
-
-            // Check if feedback is an array and has content
-            if (Array.isArray(feedback) && feedback.length) {
-                feedback.forEach(item => {
-                    const paragraph = document.createElement('p');
-                    paragraph.textContent = item;
-                    feedbackContainer.appendChild(paragraph);
-                });
+            console.log(feedback)
+            // Check if feedback is a non-empty string
+            if (typeof feedback === 'string' && feedback.trim() !== '') {
+                // Directly set the feedback as the content
+                feedbackContainer.innerHTML = feedback;
             } else {
-                // If no feedback is present, display a default message
+                // If no feedback is present or it's not a string, display a default message
                 feedbackContainer.textContent = 'No feedback available.';
             }
         }
-
 
         // Call the functions to color code the transcript and create the legend
         highlightTranscript(data.words_and_clarity_scores);

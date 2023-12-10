@@ -6,6 +6,8 @@ from feedback import llama_feedback
 from input_processing import extract_and_save_frames
 from script_correctness import analyze_correctness
 from speech_to_text import (
+    analyze_pause_alignment,
+    calculate_word_times,
     chain_words_with_pauses,
     extract_word_probabilities,
     extract_word_timings,
@@ -23,11 +25,17 @@ def get_statistics(script):
     transcribed_text = transcribed_data["text"]
 
     transcribed_word_timings = extract_word_timings(transcribed_data)
-    
+    times_per_word, times_per_word_length = calculate_word_times(
+        transcribed_word_timings
+    )
+
     transcribed_text_with_pauses = chain_words_with_pauses(
         word_data=transcribed_word_timings, pause_length_seconds=0.8
     )
     num_pauses = transcribed_text_with_pauses.count("[pause]")
+    pause_alignment_score = analyze_pause_alignment(
+        script, transcribed_text_with_pauses
+    )
 
     transcribed_word_clarity = extract_word_probabilities(
         transcribed_data, probabilities_only=False
@@ -67,6 +75,11 @@ def get_statistics(script):
         "average_direction": average_direction,
         "average_emotion": average_emotion,
         "num_pauses": num_pauses,
+        "pause_alignment_score": pause_alignment_score,
+        "times_per_word": times_per_word,
+        "times_per_word_length": times_per_word_length,
     }
-    statistics["feedback"] = llama_feedback(json.dumps(statistics, indent=4))
+    feedback = llama_feedback(json.dumps(statistics, indent=4)).replace("\n", "")
+    statistics["feedback"] = feedback
+
     return statistics

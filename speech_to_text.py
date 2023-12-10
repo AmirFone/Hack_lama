@@ -65,3 +65,45 @@ def extract_word_probabilities(input_dict, probabilities_only=False):
                 output.append((word, probability))
 
     return output
+
+
+def calculate_word_times(word_times_list):
+    times_per_word = []
+    times_per_word_length = []
+
+    for word, start, end in word_times_list:
+        duration = end - start
+        times_per_word.append(duration)
+
+        # Calculate time per character, excluding spaces and punctuation
+        word_length = len(word.strip().strip(".,!?"))
+        if word_length > 0:
+            time_per_char = duration / word_length
+        else:
+            time_per_char = 0
+        times_per_word_length.append(time_per_char)
+
+    return times_per_word, times_per_word_length
+
+
+def analyze_pause_alignment(string1, string2):
+    # Convert strings to lists of words
+    words1 = string1.split()
+    words2 = string2.split()
+
+    # Count total pauses in both strings
+    total_pauses = words1.count("[pause]") + words2.count("[pause]")
+
+    # If there are no pauses in both strings, return 1 as they are perfectly aligned in terms of pauses
+    if total_pauses == 0:
+        return 1
+
+    # Count matching pauses
+    matching_pauses = 0
+    for w1, w2 in zip(words1, words2):
+        if w1 == "[pause]" and w2 == "[pause]":
+            matching_pauses += 1
+
+    # Calculate the score
+    score = matching_pauses / (total_pauses / 2)
+    return score
