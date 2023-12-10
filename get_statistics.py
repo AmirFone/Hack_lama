@@ -79,7 +79,21 @@ def get_statistics(script):
         "times_per_word": times_per_word,
         "times_per_word_length": times_per_word_length,
     }
-    feedback = llama_feedback(json.dumps(statistics, indent=4)).replace("\n", "")
+    
+    reduced_stats = {
+        "average_clarity_score": average_word_clarity,
+        "transcribed_text_with_pauses": transcribed_text_with_pauses,
+        "script_correctness_score": script_correctness,
+        "direction_percentages": direction_percentages,
+        "emotion_percentages": emotion_percentages,
+        "average_direction": average_direction,
+        "average_emotion": average_emotion,
+        "num_pauses": num_pauses,
+        "pause_alignment_score": pause_alignment_score,
+        "times_per_word_length": times_per_word_length,
+    }    
+    
+    feedback = llama_feedback(json.dumps(reduced_stats, indent=4)).replace("\n", "")
     statistics["feedback"] = feedback
 
     return statistics

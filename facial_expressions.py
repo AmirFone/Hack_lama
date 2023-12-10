@@ -47,15 +47,16 @@ def annotate_image(image_path):
 def process_images(images):
     video_analysis = []
     # eye_engagement = 0
-    for image in images[:5]:  # TODO: This should be removed when we need one image analysis per word
+    # for image in images[:5]:  # TODO: The limit should be removed when we need one image analysis per word
+    for ind, image in enumerate(images):
+        if ind % 5 != 0:
+            continue
         response = annotate_image(image)
         content = response["choices"][0]["message"]["content"]
         content = content[1:-1].split(",")
         sentiment, direction = content[0].strip(), content[1].strip()
-        # if direction == 'center':
-        #    eye_engagement += 1
         video_analysis.append((image, sentiment, direction))
-    return video_analysis  # , eye_engagement/len(images)
+    return video_analysis
 
 
 def get_image_statistics(data):

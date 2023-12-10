@@ -1,4 +1,4 @@
-let progressInterval, recordingTime, maxRecordingTime = 15000;
+let progressInterval, recordingTime, maxRecordingTime = 25000;
 document.querySelector('.browse-btn').addEventListener('click', function() {
     document.querySelector('#fileInput').click();
 });

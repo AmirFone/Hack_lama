@@ -20,7 +20,7 @@ def llama_feedback(data=None):
         endpoint,
         json={
             "model": "togethercomputer/llama-2-70b-chat",
-            "max_tokens": 150,
+            "max_tokens": 500,
             "prompt": data,
             "request_type": "language-model-inference",
             "temperature": 0.7,
@@ -37,6 +37,7 @@ def llama_feedback(data=None):
         },
     )
 
+    print(res)
     text = res.json()["output"]["choices"][0]["text"]
-    print(text)
+
     return text
