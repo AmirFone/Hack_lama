@@ -73,7 +73,7 @@ def calculate_word_times(word_times_list):
 
     for word, start, end in word_times_list:
         duration = end - start
-        times_per_word.append(duration)
+        times_per_word.append((word, duration))
 
         # Calculate time per character, excluding spaces and punctuation
         word_length = len(word.strip().strip(".,!?"))
@@ -81,7 +81,7 @@ def calculate_word_times(word_times_list):
             time_per_char = duration / word_length
         else:
             time_per_char = 0
-        times_per_word_length.append(time_per_char)
+        times_per_word_length.append((word, time_per_char))
 
     return times_per_word, times_per_word_length
 
