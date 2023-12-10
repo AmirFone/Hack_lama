@@ -55,7 +55,32 @@
             width: 100%;
             height: auto;
         }
-
+	.footer {
+		text-align: center;
+		padding: 20px;
+		background-color: #f2f2f2; /* Light grey background */
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+		box-sizing: border-box;
+	      }
+	      
+	    
+	    
+	    .footer p {
+		color: #333; /* Dark grey color for text */
+		margin: 0; /* Remove default margin */
+		font-size: 14px;
+	      }
+	    
+	    html, body {
+		min-height: 100%;
+		position: relative;
+	      }
+	      
+	    .signup-container {
+		padding-bottom: 80px; /* Footer height + some extra space */
+	      }
         @media (max-width: 800px) {
             .charts-container {
                 flex-direction: column;
@@ -254,5 +279,9 @@
 	    displayFeedback(data.feedback);
     </script>
 
+    <div class="footer">
+        <p>&copy; 2023 LLM Website. All rights reserved to LLama.</p>
+        <p>Contact us: CT@LLAMA.com</p>
+    </div>
 </body>
 </html>

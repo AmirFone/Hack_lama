@@ -27,5 +27,5 @@ def llama_feedback(Data):
 	}, headers={
 	"Authorization": "Bearer 2f4d0f5a97955ba793b6b8dac50f2f0f2f834dc9863ade1d9feef1769c2b15ee",
 	})
-	print(res.json()['output']['choices'][0]['text'])
+	# print(res.json()['output']['choices'][0]['text'])
 # print(WizardLM_feedback('Hello'))
