@@ -18,6 +18,13 @@ Script_TEXT = ""
 app = Flask(__name__)
 
 
+
+@app.route("/generate_script", methods=["GET"])
+def generate_script():
+    # Here you would generate your script text or get it from where it's stored
+    script_text = "The script text that you want to paste in the text area."
+    return script_text
+
 @app.route("/")
 def home():
     return render_template("login.html")

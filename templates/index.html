@@ -16,6 +16,7 @@
             <div class="upload-box">
                 <div class="drag-drop-text">Drag & Drop Your Document Here or Paste Text Below</div>
                 <button class="browse-btn">Browse File</button>
+                <button class="generate-script-btn" onclick="generateScript()">Generate Script</button>
                 <input type="file" id="fileInput" class="browse-btn" style="display: none;" onchange="handlePDFInput(event)">
 
             </div>
@@ -31,7 +32,7 @@
     </div>
     <!-- Footer -->
     <div class="footer">
-        <p>&copy; 2023 LLM Website. All rights reserved to LLama.</p>
+        <p>&copy; 2023 LLM Website. All rights reserved to Script.AI.</p>
         <p>Contact us: CT@LLAMA.com</p>
     </div>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
