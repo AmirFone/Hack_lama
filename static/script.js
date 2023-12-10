@@ -110,10 +110,17 @@ function stopRecording() {
             method: 'POST',
             body: formData
         }).then(response => {
-            return response.text();
+            if (response.ok) {
+                // Redirect to the /results page
+                window.location.href = '/results';
+            } else {
+                return response.text();
+            }
         }).then(data => {
-            console.log(data);
-            // Handle server response here
+            if (data) {
+                console.log(data);
+                // Handle server error response here
+            }
         }).catch(error => {
             console.error('Error sending the video:', error);
         });

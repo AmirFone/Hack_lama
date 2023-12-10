@@ -1,14 +1,22 @@
-import json
-from flask import Flask, request, redirect, url_for, render_template, jsonify
+from flask import Flask, flash, request, redirect, url_for, render_template, jsonify
 import os
 import subprocess
-import sys
-import PyPDF2
 import boto3
+<<<<<<< HEAD
 import random
 import tempfile
 sys.path.append('/Users/amirhossain/Desktop/Hack_lama')
 from input_processing import extract_text_from_pdf, upload_file_to_s3, upload_python_object_to_s3
+=======
+
+from input_processing import (
+    extract_text_from_pdf,
+    upload_file_to_s3,
+    upload_python_object_to_s3,
+)
+
+s3_client = boto3.client("s3")
+>>>>>>> d59bd2b867dbaad0b798c9ff036306b052cf9ca7
 from get_statistics import get_statistics
 from feedback import llama_feedback
 
@@ -80,7 +88,9 @@ def upload_video():
         )
 
         os.remove(temp_video_path)
-    return redirect(url_for("results"))
+
+    # return redirect(url_for("results"))
+    return jsonify({"message": "Video posted successfully"}), 200
 
 
 @app.route("/results")
@@ -88,7 +98,6 @@ def results():
     global Script_TEXT
     data = get_statistics(Script_TEXT)
     upload_python_object_to_s3(data, "hackllama", "statistics_data.json")
-    print("Hallooooooooo")
     return render_template("results.html", data=data)
 
 
