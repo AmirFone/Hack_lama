@@ -3,7 +3,6 @@ import os
 import subprocess
 import boto3
 import sys
-sys.path.append('/Users/amirhossain/Desktop/Hack_lama')
 from input_processing import (
     extract_text_from_pdf,
     upload_file_to_s3,
@@ -91,6 +90,7 @@ def results():
     global Script_TEXT
     data = get_statistics(Script_TEXT)
     upload_python_object_to_s3(data, "hackllama", "statistics_data.json")
+    print("hfjsdgsdkgjhsk",data)
     return render_template("results.html", data=data)
 
 
