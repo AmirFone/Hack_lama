@@ -59,32 +59,39 @@
             width: 100%;
             height: auto;
         }
-	.footer {
-		text-align: center;
-		padding: 20px;
-		background-color: #f2f2f2; /* Light grey background */
-		position: absolute;
-		bottom: 0;
-		width: 100%;
-		box-sizing: border-box;
-	      }
-	      
-	    
-	    
-	    .footer p {
-		color: #333; /* Dark grey color for text */
-		margin: 0; /* Remove default margin */
-		font-size: 14px;
-	      }
-	    
-	    html, body {
-		min-height: 100%;
-		position: relative;
-	      }
-	      
-	    .signup-container {
-		padding-bottom: 80px; /* Footer height + some extra space */
-	      }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #f2f2f2;
+            /* Light grey background */
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+
+
+        .footer p {
+            color: #333;
+            /* Dark grey color for text */
+            margin: 0;
+            /* Remove default margin */
+            font-size: 14px;
+        }
+
+        html,
+        body {
+            min-height: 100%;
+            position: relative;
+        }
+
+        .signup-container {
+            padding-bottom: 80px;
+            /* Footer height + some extra space */
+        }
+
         @media (max-width: 800px) {
             .charts-container {
                 flex-direction: column;
@@ -260,23 +267,19 @@
                 legendContainer.appendChild(legendItem);
             });
         }
+
         function displayFeedback(feedback) {
             const feedbackContainer = document.getElementById('feedbackContent');
-            feedbackContainer.innerHTML = ''; // Clear any existing content
-
-            // Check if feedback is an array and has content
-            if (Array.isArray(feedback) && feedback.length) {
-                feedback.forEach(item => {
-                    const paragraph = document.createElement('p');
-                    paragraph.textContent = item;
-                    feedbackContainer.appendChild(paragraph);
-                });
+            console.log(feedback)
+            // Check if feedback is a non-empty string
+            if (typeof feedback === 'string' && feedback.trim() !== '') {
+                // Directly set the feedback as the content
+                feedbackContainer.innerHTML = feedback;
             } else {
-                // If no feedback is present, display a default message
+                // If no feedback is present or it's not a string, display a default message
                 feedbackContainer.textContent = 'No feedback available.';
             }
         }
-
 
         // Call the functions to color code the transcript and create the legend
         highlightTranscript(data.words_and_clarity_scores);
