@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,7 +23,8 @@
         .container {
             background-color: #fff;
             width: 80%;
-            max-width: 1200px; /* Adjust width as necessary */
+            max-width: 1200px;
+            /* Adjust width as necessary */
             padding: 40px;
             border-radius: 10px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
@@ -36,8 +38,10 @@
             display: flex;
             justify-content: space-around;
             align-items: flex-start;
-            flex-wrap: wrap; /* Wrap charts for smaller screens */
-            gap: 20px; /* Space between charts */
+            flex-wrap: wrap;
+            /* Wrap charts for smaller screens */
+            gap: 20px;
+            /* Space between charts */
         }
 
         .section {
@@ -55,32 +59,39 @@
             width: 100%;
             height: auto;
         }
-	.footer {
-		text-align: center;
-		padding: 20px;
-		background-color: #f2f2f2; /* Light grey background */
-		position: absolute;
-		bottom: 0;
-		width: 100%;
-		box-sizing: border-box;
-	      }
-	      
-	    
-	    
-	    .footer p {
-		color: #333; /* Dark grey color for text */
-		margin: 0; /* Remove default margin */
-		font-size: 14px;
-	      }
-	    
-	    html, body {
-		min-height: 100%;
-		position: relative;
-	      }
-	      
-	    .signup-container {
-		padding-bottom: 80px; /* Footer height + some extra space */
-	      }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #f2f2f2;
+            /* Light grey background */
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+
+
+        .footer p {
+            color: #333;
+            /* Dark grey color for text */
+            margin: 0;
+            /* Remove default margin */
+            font-size: 14px;
+        }
+
+        html,
+        body {
+            min-height: 100%;
+            position: relative;
+        }
+
+        .signup-container {
+            padding-bottom: 80px;
+            /* Footer height + some extra space */
+        }
+
         @media (max-width: 800px) {
             .charts-container {
                 flex-direction: column;
@@ -88,6 +99,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <div class="container">
@@ -119,26 +131,26 @@
         <!-- Transcribed Script Section -->
         <div class="section">
             <h3>Transcribed Script</h3>
-	    <div class="section" id="transcriptLegend">
-		<h3>Transcript Clarity Legend</h3>
-		<div id="legendContainer"></div>
-	    </div>
+            <div class="section" id="transcriptLegend">
+                <h3>Transcript Clarity Legend</h3>
+                <div id="legendContainer"></div>
+            </div>
             <div id="transcribedScript"></div>
         </div>
 
         <div class="divider"></div>
 
         <!-- Feedback Section -->
-	<div class="section" id="feedbackSection">
-		<h3>Feedback</h3>
-		<div id="feedbackContent"></div>
-	    </div>
+        <div class="section" id="feedbackSection">
+            <h3>Feedback</h3>
+            <div id="feedbackContent"></div>
+        </div>
     </div>
     <script>
         const data = JSON.parse('{{ data | tojson | safe }}');
-	console.log('data==');
-	console.log(data);
-        
+        console.log('data==');
+        console.log(data);
+
         // Dynamically populate the transcribed script
         document.getElementById('transcribedScript').innerText = data.transcribed_text;
 
@@ -194,89 +206,89 @@
                 }]
             }
         });
-	function getHighlightColorForProbability(probability) {
-		if (probability <= 0.2) return 'rgba(255, 0, 0, 0.2)'; // Red with 20% transparency
-		else if (probability <= 0.4) return 'rgba(255, 165, 0, 0.2)'; // Orange with 20% transparency
-		else if (probability <= 0.6) return 'rgba(255, 255, 0, 0.2)'; // Yellow with 20% transparency
-		else if (probability <= 0.8) return 'rgba(144, 238, 144, 0.2)'; // Light Green with 20% transparency
-		else return 'rgba(0, 128, 0, 0.2)'; // Dark Green with 20% transparency
-	    }
-	
-	    // Function to create the highlighted transcript
-	    function highlightTranscript(wordsAndClarityScores) {
-		const transcriptContainer = document.getElementById('transcribedScript');
-		transcriptContainer.innerHTML = ''; // Clear any existing content
-	
-		wordsAndClarityScores.forEach(wordData => {
-		    const word = wordData[0];
-		    const score = wordData[1];
-		    const backgroundColor = getHighlightColorForProbability(score);
-		    const span = document.createElement('span');
-		    span.textContent = word + ' ';
-		    span.style.backgroundColor = backgroundColor;
-		    span.style.padding = '0.2em';
-		    span.style.margin = '0.1em';
-		    span.style.borderRadius = '0.3em'; // Rounded corners for highlight
-		    transcriptContainer.appendChild(span);
-		});
-	    }
-	
-	    // Call highlightTranscript with your words and clarity scores
-	    highlightTranscript(data.words_and_clarity_scores);
-	    function createClarityLegend() {
-		const legendContainer = document.getElementById('legendContainer');
-		const ranges = [
-		    { score: '0.0 - 0.2', color: 'rgba(255, 0, 0, 0.2)' },
-		    { score: '0.2 - 0.4', color: 'rgba(255, 165, 0, 0.2)' },
-		    { score: '0.4 - 0.6', color: 'rgba(255, 255, 0, 0.2)' },
-		    { score: '0.6 - 0.8', color: 'rgba(144, 238, 144, 0.2)' },
-		    { score: '0.8 - 1.0', color: 'rgba(0, 128, 0, 0.2)' }
-		];
-	
-		ranges.forEach(range => {
-		    const legendItem = document.createElement('div');
-		    legendItem.style.display = 'flex';
-		    legendItem.style.alignItems = 'center';
-		    legendItem.style.marginBottom = '5px';
-	
-		    const colorBox = document.createElement('div');
-		    colorBox.style.backgroundColor = range.color;
-		    colorBox.style.width = '25px';
-		    colorBox.style.height = '25px';
-		    colorBox.style.marginRight = '10px';
-		    colorBox.style.borderRadius = '0.3em';
-	
-		    const label = document.createElement('span');
-		    label.textContent = range.score;
-		    label.style.fontSize = '0.8em';
-	
-		    legendItem.appendChild(colorBox);
-		    legendItem.appendChild(label);
-		    legendContainer.appendChild(legendItem);
-		});
-	    }
-	    function displayFeedback(feedback) {
-		const feedbackContainer = document.getElementById('feedbackContent');
-		feedbackContainer.innerHTML = ''; // Clear any existing content
-	
-		// Check if feedback is an array and has content
-		if(Array.isArray(feedback) && feedback.length) {
-		    feedback.forEach(item => {
-			const paragraph = document.createElement('p');
-			paragraph.textContent = item;
-			feedbackContainer.appendChild(paragraph);
-		    });
-		} else {
-		    // If no feedback is present, display a default message
-		    feedbackContainer.textContent = 'No feedback available.';
-		}
-	    }
-	
-	
-	    // Call the functions to color code the transcript and create the legend
-	    highlightTranscript(data.words_and_clarity_scores);
-	    createClarityLegend();
-	    displayFeedback(data.feedback);
+        function getHighlightColorForProbability(probability) {
+            if (probability <= 0.2) return 'rgba(255, 0, 0, 0.2)'; // Red with 20% transparency
+            else if (probability <= 0.4) return 'rgba(255, 165, 0, 0.2)'; // Orange with 20% transparency
+            else if (probability <= 0.6) return 'rgba(255, 255, 0, 0.2)'; // Yellow with 20% transparency
+            else if (probability <= 0.8) return 'rgba(144, 238, 144, 0.2)'; // Light Green with 20% transparency
+            else return 'rgba(0, 128, 0, 0.2)'; // Dark Green with 20% transparency
+        }
+
+        // Function to create the highlighted transcript
+        function highlightTranscript(wordsAndClarityScores) {
+            const transcriptContainer = document.getElementById('transcribedScript');
+            transcriptContainer.innerHTML = ''; // Clear any existing content
+
+            wordsAndClarityScores.forEach(wordData => {
+                const word = wordData[0];
+                const score = wordData[1];
+                const backgroundColor = getHighlightColorForProbability(score);
+                const span = document.createElement('span');
+                span.textContent = word + ' ';
+                span.style.backgroundColor = backgroundColor;
+                span.style.padding = '0.2em';
+                span.style.margin = '0.1em';
+                span.style.borderRadius = '0.3em'; // Rounded corners for highlight
+                transcriptContainer.appendChild(span);
+            });
+        }
+
+        // Call highlightTranscript with your words and clarity scores
+        highlightTranscript(data.words_and_clarity_scores);
+        function createClarityLegend() {
+            const legendContainer = document.getElementById('legendContainer');
+            const ranges = [
+                { score: '0.0 - 0.2', color: 'rgba(255, 0, 0, 0.2)' },
+                { score: '0.2 - 0.4', color: 'rgba(255, 165, 0, 0.2)' },
+                { score: '0.4 - 0.6', color: 'rgba(255, 255, 0, 0.2)' },
+                { score: '0.6 - 0.8', color: 'rgba(144, 238, 144, 0.2)' },
+                { score: '0.8 - 1.0', color: 'rgba(0, 128, 0, 0.2)' }
+            ];
+
+            ranges.forEach(range => {
+                const legendItem = document.createElement('div');
+                legendItem.style.display = 'flex';
+                legendItem.style.alignItems = 'center';
+                legendItem.style.marginBottom = '5px';
+
+                const colorBox = document.createElement('div');
+                colorBox.style.backgroundColor = range.color;
+                colorBox.style.width = '25px';
+                colorBox.style.height = '25px';
+                colorBox.style.marginRight = '10px';
+                colorBox.style.borderRadius = '0.3em';
+
+                const label = document.createElement('span');
+                label.textContent = range.score;
+                label.style.fontSize = '0.8em';
+
+                legendItem.appendChild(colorBox);
+                legendItem.appendChild(label);
+                legendContainer.appendChild(legendItem);
+            });
+        }
+        function displayFeedback(feedback) {
+            const feedbackContainer = document.getElementById('feedbackContent');
+            feedbackContainer.innerHTML = ''; // Clear any existing content
+
+            // Check if feedback is an array and has content
+            if (Array.isArray(feedback) && feedback.length) {
+                feedback.forEach(item => {
+                    const paragraph = document.createElement('p');
+                    paragraph.textContent = item;
+                    feedbackContainer.appendChild(paragraph);
+                });
+            } else {
+                // If no feedback is present, display a default message
+                feedbackContainer.textContent = 'No feedback available.';
+            }
+        }
+
+
+        // Call the functions to color code the transcript and create the legend
+        highlightTranscript(data.words_and_clarity_scores);
+        createClarityLegend();
+        displayFeedback(data.feedback);
     </script>
 
     <div class="footer">
@@ -284,4 +296,5 @@
         <p>Contact us: CT@LLAMA.com</p>
     </div>
 </body>
+
 </html>
