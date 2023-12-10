@@ -49,9 +49,9 @@
             <h3>Transcribed Script Analytics</h3>
             <div class="section" id="transcriptLegend">
                 <h3>Transcript Clarity Legend</h3>
-                <div id="legendContainer"></div>
+		<div id="transcribedScript"></div>	    
             </div>
-            <div id="transcribedScript"></div>	    
+	<div id="legendContainer"></div>
         </div>
 	<div class="divider"></div>
 	<!-- New div for timing-based highlighting -->
@@ -69,6 +69,10 @@
             <h3>Feedback</h3>
             <div id="feedbackContent"></div>
         </div>
+	<div class="section" id="statsSection">
+		<h3>Other interesting statistics</h3>
+		<div id="statsContent"></div>
+	</div>
     </div>
     <script>
         const data = JSON.parse('{{ data | tojson | safe }}');
@@ -236,6 +240,12 @@
                 feedbackContainer.textContent = 'No feedback available.';
             }
         }
+
+	function displayStats() {
+		const statsContentContainer = document.getElementById('statsContent');
+		stats = `Script match score: ${data.script_correctness_score}   Num pauses: ${data.num_pauses}    Pause alignment score: ${data.pause_alignment_score} `
+		statsContentContainer.innerHTML = stats;
+	    }
 	function highlightTiming(transcribedWordTimings) {
 		const timingContainer = document.getElementById('times_per_word');
 		timingContainer.innerHTML = ''; // Clear any existing content
@@ -304,6 +314,7 @@
 	createTimingLegend();
         
 	displayFeedback(data.feedback);
+	displayStats();
     </script>
 </body>
 
