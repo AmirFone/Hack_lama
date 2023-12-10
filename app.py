@@ -2,21 +2,14 @@ from flask import Flask, flash, request, redirect, url_for, render_template, jso
 import os
 import subprocess
 import boto3
-<<<<<<< HEAD
-import random
-import tempfile
+import sys
 sys.path.append('/Users/amirhossain/Desktop/Hack_lama')
-from input_processing import extract_text_from_pdf, upload_file_to_s3, upload_python_object_to_s3
-=======
-
 from input_processing import (
     extract_text_from_pdf,
     upload_file_to_s3,
     upload_python_object_to_s3,
 )
-
 s3_client = boto3.client("s3")
->>>>>>> d59bd2b867dbaad0b798c9ff036306b052cf9ca7
 from get_statistics import get_statistics
 from feedback import llama_feedback
 
