@@ -23,27 +23,26 @@ def get_statistics(script):
     transcribed_text = transcribed_data["text"]
 
     transcribed_word_timings = extract_word_timings(transcribed_data)
+    
     transcribed_text_with_pauses = chain_words_with_pauses(
         word_data=transcribed_word_timings, pause_length_seconds=0.8
     )
+    num_pauses = transcribed_text_with_pauses.count("[pause]")
 
     transcribed_word_clarity = extract_word_probabilities(
         transcribed_data, probabilities_only=False
     )
-    average_word_clarity = sum(value for _, value in transcribed_word_clarity) / len(
-        transcribed_word_clarity
-    )  if len(transcribed_word_clarity) > 0 else 1 # Assumes probabilities_only=False
+    average_word_clarity = (
+        sum(value for _, value in transcribed_word_clarity)
+        / len(transcribed_word_clarity)
+        if len(transcribed_word_clarity) > 0
+        else 1
+    )  # Assumes probabilities_only=False
 
     script_correctness = analyze_correctness(
         spoken_text=transcribed_text_with_pauses,
         script_input=script,  # Assumes script has '[pause]' annotated
     )
-
-    # sentiments = get_sentiment_types(
-    #     frames=extract_and_save_frames(
-    #         video_path=mp4_path, word_timings=transcribed_word_timings
-    #     )
-    # )
 
     file_paths = extract_and_save_frames(
         video_path=mp4_path, word_timings=transcribed_word_timings
@@ -67,6 +66,7 @@ def get_statistics(script):
         "emotion_percentages": emotion_percentages,
         "average_direction": average_direction,
         "average_emotion": average_emotion,
+        "num_pauses": num_pauses,
     }
-    statistics['feedback']=llama_feedback(json.dumps(statistics, indent=4))
+    statistics["feedback"] = llama_feedback(json.dumps(statistics, indent=4))
     return statistics
