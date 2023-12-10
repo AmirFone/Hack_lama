@@ -1,125 +1,147 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Sign Up</title>
-	<link rel="icon" type="image/png" href="static/logo.png">
-	<style>
-		body {
-			font-family: 'Arial', sans-serif;
-			background-color: #e6e7ee; /* Light grey background */
-			margin: 0;
-			padding: 0;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			height: 100vh;
-			position: relative;
-		}
-		.header-logo {
-			position: absolute; /* Position it over the content */
-			top: 20px; /* Adjust as necessary */
-			left: 20px; /* Adjust as necessary */
-			width: 150px; /* Adjust as necessary for your logo */
-			box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2); /* Shadow for depth */
-		}
-		.button {
-			background-color: #5b64e4;
-			color: white;
-			padding: 10px 20px;
-			border: none;
-			border-radius: 5px;
-			cursor: pointer;
-			margin-top: 20px;
-			font-size: 16px; /* Larger font size for better visibility */
-			display: block; /* Makes the button a block element */
-			width: 100%; /* Full width */
-			box-sizing: border-box; /* Ensures padding does not add to the width */
-		}
-		.button:hover {
-			background-color: #4a56d3;
-			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-		}
-		.signup-container {
-			margin-top: 160px; /* Adjusted for the header logo */
-			background-color: #ffffff;
-			width: 400px;
-			padding: 40px;
-			border-radius: 8px;
-			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for depth */
-			margin: auto;
-			position: relative; /* For the footer */
-			padding-bottom: 100px; /* Adjusted bottom padding to account for footer */
-		}
-		h2 {
-			color: #333; /* Dark grey color for the text */
-			text-align: center;
-			margin-bottom: 20px;
-		}
-		input[type=text], input[type=password] {
-			width: calc(100% - 20px);
-			padding: 10px;
-			margin-bottom: 20px;
-			border: 1px solid #ccc; /* Lighter border color */
-			border-radius: 4px;
-			box-sizing: border-box;
-		}
-		.already-account {
-			display: block;
-			text-align: center;
-			margin-top: 20px;
-			color: #333; /* Dark grey color for text */
-		}
-		a {
-			color: #5b64e4; /* Same blue color as the submit button for consistency */
-			text-decoration: none;
-		}
-		a:hover {
-			text-decoration: underline;
-		}
-		.footer {
-			text-align: center;
-			padding: 20px;
-			background-color: #f2f2f2; /* Light grey background */
-			position: absolute;
-			bottom: 0;
-			width: 100%;
-			box-sizing: border-box;
-		}
-		.footer p {
-			color: #333; /* Dark grey color for text */
-			margin: 0; /* Remove default margin */
-			font-size: 14px;
-		}
-		@media (max-width: 480px) {
-			.signup-container {
-				width: 95%;
-				padding: 20px;
-			}
-			.header-logo {
-				width: 100px; /* Smaller size for smaller screens */
-				top: 10px;
-				left: 50%;
-				transform: translateX(-50%); /* Center the logo on smaller screens */
-			}
-		}
-	</style>
+    <title>Sign Up</title>
+    <link rel="icon" type="image/png" href="static/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"> <!-- Corrected Font Awesome CSS link -->
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e6e7ee; /* Light grey background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+        }
+        .header-logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 150px;
+            box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+        }
+        .button {
+            background-color: #5b64e4; /* Adjust the button color if needed */
+            color: white;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 16px;
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .button:hover {
+            background-color: #4a56d3; /* Adjust the hover color if needed */
+        }
+        .signup-container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            margin: auto;
+            position: relative;
+            padding-bottom: 100px;
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        input[type=text], input[type=password], input[type=email] {
+            width: 100%;
+            padding: 15px 20px 15px 50px; /* Adjusted padding for icon spacing */
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        .icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ccc;
+            pointer-events: none;
+        }
+        .already-account {
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+        }
+        a {
+            color: #5b64e4;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #f2f2f2;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .footer p {
+            color: #333;
+            margin: 0;
+            font-size: 14px;
+        }
+        @media (max-width: 480px) {
+            .signup-container {
+                width: 95%;
+                padding: 20px;
+            }
+            .header-logo {
+                width: 100px;
+                top: 10px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+    </style>
 </head>
 <body>
-	<div class="header-logo">
-		<img src="static/logo.png" alt="LLAMA Logo" style="width:100%;">
-	</div>
-	<div class="signup-container">
-		<h2>Sign Up</h2>
-		<input type="text" id="name" name="name" placeholder="Name">
-		<input type="text" id="email" name="email" placeholder="Phone Number or Email">
-		<input type="password" id="password" name="password" placeholder="Password">
-		<input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password">
-		<button type="button" class="button" onclick="window.location.href='/script';">Next</button>
-		<span class="already-account">Already have an account? <a href="/login">Log in</a></span>
-	</div>
-	<div class="footer">
-		<p>&copy; 2023 LLM Website. All rights reserved to LLama.</p>
-		<p>Contact us: CT@LLAMA.com</p>
-	</div>
+    <div class="header-logo">
+        <img src="static/logo.png" alt="LLAMA Logo" style="width:100%;">
+    </div>
+    <div class="signup-container">
+        <h2>Sign Up</h2>
+        <div class="input-wrapper">
+            <i class="fas fa-user icon"></i>
+            <input type="text" id="name" name="name" placeholder="Full Name">
+        </div>
+        <div class="input-wrapper">
+            <i class="fas fa-envelope icon"></i>
+            <input type="email" id="email" name="email" placeholder="Email Address">
+        </div>
+        <div class="input-wrapper">
+            <i class="fas fa-lock icon"></i>
+            <input type="password" id="password" name="password" placeholder="Password">
+        </div>
+        <div class="input-wrapper">
+            <i class="fas fa-lock icon"></i>
+            <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password">
+        </div>
+        <button type="button" class="button" onclick="window.location.href='/script';">Next</button>
+        <div class="already-account">Already have an account? <a href="/login">Log in</a></div>
+    </div>
+    <div class="footer">
+        <p>&copy; 2023 LLM Website. All rights reserved to LLama.</p>
+        <p>Contact us: CT@LLAMA.com</p>
+    </div>
 </body>
 </html>
