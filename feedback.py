@@ -9,7 +9,7 @@ a person performed the script. Context:
 
 def llama_feedback(Data=None):
   if Data is None:
-    Data = "generate a two sentence script for me to present to an audience"
+    Data = "generate a two sentence script for me to present to an audience only give me the two sentences and nothing else"
   else:
     Data = prompt + Data
   
