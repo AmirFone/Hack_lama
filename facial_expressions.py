@@ -2,7 +2,7 @@ import base64
 from collections import Counter
 import requests
 
-api_key = "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"
+api_key = "key"
 
 
 # Function to encode the image
