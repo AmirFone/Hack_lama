@@ -11,6 +11,12 @@ Script AI is an innovative tool designed to enhance public speaking and acting p
 - **Real-time Feedback**: Gain insights on improving delivery, tone, and audience engagement.
 - **User-friendly Interface**: Navigate through the recording and analysis process with ease.
 
+## Technical Stack
+- **Frontend**: Crafted with modern web technologies for a responsive user experience.
+- **Backend**: Built on Flask, our robust backend handles complex audio and video processing tasks efficiently.
+- **Data Storage**: Utilizes AWS S3 for secure and scalable storage of video and script data.
+- **Machine Learning**: Employs GPT Vision for facial expression analysis and Together API for generating the feedback.
+
 ## Getting Started
 
 ### Prerequisites
